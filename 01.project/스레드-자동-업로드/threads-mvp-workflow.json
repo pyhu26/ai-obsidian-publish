@@ -1,0 +1,210 @@
+{
+  "name": "스레드 자동 업로드 MVP",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "cronExpression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "cron-trigger",
+      "name": "매일 오전 9시 트리거",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "complete",
+        "model": "gpt-4o-mini",
+        "prompt": "개발자를 위한 실용적인 코딩 팁 하나를 3문장으로 작성해주세요.\n\n요구사항:\n- 실제로 도움이 되는 구체적인 팁\n- 친근하고 유익한 톤\n- 마지막에 관련 해시태그 2-3개 포함\n- 전체 280자 이내\n\n예시 주제: VSCode 확장프로그램, Git 명령어, 디버깅 기법, 코드 리뷰, 생산성 도구 등",
+        "options": {
+          "maxTokens": 150,
+          "temperature": 0.7
+        }
+      },
+      "id": "openai-content",
+      "name": "OpenAI 콘텐츠 생성",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "OPENAI_API_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 콘텐츠 검증 및 정리\nconst content = $input.first().json.choices[0].message.content;\n\n// 기본 검증\nif (!content || content.length > 280) {\n  throw new Error('콘텐츠가 비어있거나 너무 깁니다.');\n}\n\n// 한글 포함 확인\nconst hasKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(content);\nif (!hasKorean) {\n  throw new Error('한글 콘텐츠가 필요합니다.');\n}\n\n// 해시태그 확인\nconst hashtags = content.match(/#\\w+/g) || [];\nif (hashtags.length < 1) {\n  throw new Error('최소 1개의 해시태그가 필요합니다.');\n}\n\nreturn {\n  content: content.trim(),\n  length: content.length,\n  hashtags: hashtags.length,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "content-validation",
+      "name": "콘텐츠 검증",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.threads.net/v1.0/me/threads",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "jsonBody": "{\n  \"media_type\": \"TEXT\",\n  \"text\": \"{{ $json.content }}\"\n}",
+        "options": {}
+      },
+      "id": "threads-post",
+      "name": "스레드 게시",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "THREADS_API_CREDENTIAL_ID",
+          "name": "Threads API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "contentType": "json",
+        "jsonBody": "{\n  \"text\": \"✅ 스레드 게시 성공!\",\n  \"attachments\": [\n    {\n      \"color\": \"good\",\n      \"fields\": [\n        {\n          \"title\": \"콘텐츠\",\n          \"value\": \"{{ $('콘텐츠 검증').first().json.content }}\",\n          \"short\": false\n        },\n        {\n          \"title\": \"게시 시간\",\n          \"value\": \"{{ new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) }}\",\n          \"short\": true\n        },\n        {\n          \"title\": \"글자 수\",\n          \"value\": \"{{ $('콘텐츠 검증').first().json.length }}자\",\n          \"short\": true\n        }\n      ]\n    }\n  ]\n}"
+      },
+      "id": "slack-success",
+      "name": "슬랙 성공 알림",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "contentType": "json",
+        "jsonBody": "{\n  \"text\": \"❌ 스레드 게시 실패!\",\n  \"attachments\": [\n    {\n      \"color\": \"danger\",\n      \"fields\": [\n        {\n          \"title\": \"에러 메시지\",\n          \"value\": \"{{ $json.error?.message || $json.message || '알 수 없는 오류' }}\",\n          \"short\": false\n        },\n        {\n          \"title\": \"실패 시간\",\n          \"value\": \"{{ new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}) }}\",\n          \"short\": true\n        },\n        {\n          \"title\": \"노드\",\n          \"value\": \"{{ $json.node?.name || '미확인' }}\",\n          \"short\": true\n        }\n      ]\n    }\n  ]\n}"
+      },
+      "id": "slack-error",
+      "name": "슬랙 에러 알림",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 실행 결과 로깅\nconst result = {\n  timestamp: new Date().toISOString(),\n  status: 'success',\n  content: $('콘텐츠 검증').first().json.content,\n  contentLength: $('콘텐츠 검증').first().json.length,\n  hashtags: $('콘텐츠 검증').first().json.hashtags,\n  threadsResponse: $('스레드 게시').first().json\n};\n\nconsole.log('스레드 자동 게시 성공:', JSON.stringify(result, null, 2));\n\nreturn result;"
+      },
+      "id": "logging",
+      "name": "결과 로깅",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "매일 오전 9시 트리거": {
+      "main": [
+        [
+          {
+            "node": "OpenAI 콘텐츠 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI 콘텐츠 생성": {
+      "main": [
+        [
+          {
+            "node": "콘텐츠 검증",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "콘텐츠 검증": {
+      "main": [
+        [
+          {
+            "node": "스레드 게시",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "스레드 게시": {
+      "main": [
+        [
+          {
+            "node": "슬랙 성공 알림",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "결과 로깅",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2024-09-23T00:00:00.000Z",
+      "updatedAt": "2024-09-23T00:00:00.000Z",
+      "id": "threads-automation",
+      "name": "스레드 자동화"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2024-09-23T00:00:00.000Z",
+  "versionId": "1"
+}
