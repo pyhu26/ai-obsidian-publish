@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[ai]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>site-lib/media/favicon.png</url><title>ai</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Sat, 27 Sep 2025 14:57:24 GMT</lastBuildDate><atom:link href="site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sat, 27 Sep 2025 14:57:24 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[Generate glossary]]></title><description><![CDATA[Create a glossary of important terms, concepts, and phrases from {}. Format each entry as "Term: Definition". Sort entries alphabetically. Return only the glossary.]]></description><link>copilot/copilot-custom-prompts/generate-glossary.html</link><guid isPermaLink="false">copilot/copilot-custom-prompts/Generate glossary.md</guid><pubDate>Sat, 27 Sep 2025 14:50:45 GMT</pubDate></item><item><title><![CDATA[Remove URLs]]></title><description><![CDATA[Remove all URLs from {}. Preserve all other content and formatting. URLs may be in various formats (http, https, www). Return only the text with URLs removed.]]></description><link>copilot/copilot-custom-prompts/remove-urls.html</link><guid isPermaLink="false">copilot/copilot-custom-prompts/Remove URLs.md</guid><pubDate>Sat, 27 Sep 2025 14:50:45 GMT</pubDate></item><item><title><![CDATA[Rewrite as tweet]]></title><description><![CDATA[Rewrite {} as a single tweet with these requirements:
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[ai]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>site-lib/media/favicon.png</url><title>ai</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Sun, 28 Sep 2025 05:14:03 GMT</lastBuildDate><atom:link href="site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sun, 28 Sep 2025 05:13:55 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[Generate glossary]]></title><description><![CDATA[Create a glossary of important terms, concepts, and phrases from {}. Format each entry as "Term: Definition". Sort entries alphabetically. Return only the glossary.]]></description><link>copilot/copilot-custom-prompts/generate-glossary.html</link><guid isPermaLink="false">copilot/copilot-custom-prompts/Generate glossary.md</guid><pubDate>Sat, 27 Sep 2025 14:50:45 GMT</pubDate></item><item><title><![CDATA[Remove URLs]]></title><description><![CDATA[Remove all URLs from {}. Preserve all other content and formatting. URLs may be in various formats (http, https, www). Return only the text with URLs removed.]]></description><link>copilot/copilot-custom-prompts/remove-urls.html</link><guid isPermaLink="false">copilot/copilot-custom-prompts/Remove URLs.md</guid><pubDate>Sat, 27 Sep 2025 14:50:45 GMT</pubDate></item><item><title><![CDATA[Rewrite as tweet]]></title><description><![CDATA[Rewrite {} as a single tweet with these requirements:
 1. Maximum 280 characters
 2. Use concise, impactful language
 3. Maintain the core message
@@ -463,7 +463,99 @@ ChatGPT, Claude, GitHub Copilot 등 AI 도구 중 하나를 선택해서 특정 
 트렌드 반영: 최신 개발 트렌드나 이슈를 프롬프트에 반영
 📅 마지막 업데이트: 2025-09-23
 📝 버전: v1.0
-🔄 다음 업데이트: MVP 테스트 완료 후]]></description><link>01.project/스레드-자동-업로드/prompt-templates.html</link><guid isPermaLink="false">01.project/스레드 자동 업로드/prompt-templates.md</guid><pubDate>Tue, 23 Sep 2025 14:09:06 GMT</pubDate></item><item><title><![CDATA[threads-mvp-workflow]]></title><link>01.project/스레드-자동-업로드/threads-mvp-workflow.html</link><guid isPermaLink="false">01.project/스레드 자동 업로드/threads-mvp-workflow.json</guid><pubDate>Tue, 23 Sep 2025 14:08:16 GMT</pubDate></item><item><title><![CDATA[PRD]]></title><description><![CDATA[
+🔄 다음 업데이트: MVP 테스트 완료 후]]></description><link>01.project/스레드-자동-업로드/prompt-templates.html</link><guid isPermaLink="false">01.project/스레드 자동 업로드/prompt-templates.md</guid><pubDate>Tue, 23 Sep 2025 14:09:06 GMT</pubDate></item><item><title><![CDATA[threads-mvp-workflow]]></title><link>01.project/스레드-자동-업로드/threads-mvp-workflow.html</link><guid isPermaLink="false">01.project/스레드 자동 업로드/threads-mvp-workflow.json</guid><pubDate>Tue, 23 Sep 2025 14:08:16 GMT</pubDate></item><item><title><![CDATA[Claude Code 주요 명령어 가이드]]></title><description><![CDATA[Claude Code CLI의 핵심 명령어들과 실제 사용 예제를 정리한 참고 문서입니다.# 현재 디렉토리를 Claude Code 프로젝트로 초기화
+claude /init 코드베이스 분석 후 CLAUDE.md 파일 생성
+프로젝트 구조와 개발 가이드라인 자동 생성
+# Claude Code 사용법 확인
+claude /help
+# 특정 파일 내용 확인
+claude /read src/main.js # 여러 파일 동시 읽기
+claude /read src/main.js src/utils.js
+# 새 파일 생성
+claude /write src/new-file.js "console.log('Hello World');"
+# 기존 파일 수정
+claude /edit src/main.js
+# 패턴 검색
+claude /search "function.*authenticate" # 특정 파일 타입에서 검색
+claude /search "useState" --type js,jsx,ts,tsx
+# 파일명으로 검색
+claude /find "*.component.js" # 디렉토리 내 특정 패턴 파일 찾기
+claude /find "test" --pattern "*.spec.js"
+# 변경사항 커밋
+claude "commit these changes with a descriptive message" # 스테이징과 커밋 함께
+claude "add all files and commit with message: feat: add new feature"
+# 새 브랜치 생성 및 전환
+claude "create new branch feature/user-auth" # Pull Request 생성
+claude "create PR for current branch"
+# 프로젝트 빌드
+claude "build the project" # 테스트 실행
+claude "run tests" # 린팅 및 포맷팅
+claude "lint and format the code"
+# 의존성 설치
+claude "install express as dependency" # 개발 의존성 설치
+claude "install jest as dev dependency"
+# 여러 작업을 순차적으로 실행
+claude "run tests, fix any failures, then build the project" # 병렬 실행 지시
+claude "run lint and tests in parallel"
+# 조건부 실행
+claude "if tests pass, then deploy to staging" # 에러 핸들링
+claude "build project, if it fails show me the errors"
+# 코드 품질 분석
+claude "analyze code quality in src/ directory" # 리팩토링 제안
+claude "suggest improvements for performance in utils.js" # 보안 검사
+claude "check for security vulnerabilities in dependencies"
+# 새 React 프로젝트 초기화
+claude "create new React project with TypeScript and Tailwind" # Express API 서버 셋업
+claude "setup Express server with middleware for CORS and logging"
+# 에러 분석
+claude "analyze this error and suggest fixes: [에러 메시지]" # 성능 문제 해결
+claude "why is my app loading slowly? check bundle size and optimize"
+# 코드 리뷰 요청
+claude "review my code changes and suggest improvements" # 베스트 프랙티스 확인
+claude "check if this code follows React best practices"
+# API 문서 생성
+claude "generate API documentation for my Express routes" # README 업데이트
+claude "update README with installation and usage instructions" 구체적이고 명확한 요청
+예상 결과 명시
+제약사항 포함
+# 좋은 예
+claude "refactor this authentication function to use async/await instead of callbacks, maintaining the same API" # 개선이 필요한 예
+claude "fix this code"
+# 복잡한 작업을 단계별로 분할
+claude "first analyze the current database schema, then suggest migration steps for the new requirements"
+# 변경사항 검증 요청
+claude "implement this feature and run tests to verify it works correctly" 민감한 정보(API 키, 패스워드) 포함 금지
+프로덕션 데이터 직접 조작 시 주의 대용량 파일 처리 시 부분적으로 나누어 요청
+복잡한 작업은 단계별로 분할 커밋 메시지는 팀 컨벤션 준수
+코드 변경 전 백업 또는 브랜치 생성 <a data-href="ccusage" href="02.area/01.claude/ccusage.html" class="internal-link" target="_self" rel="noopener nofollow">ccusage</a> - Claude Code 토큰 사용량 분석
+<br><a data-tooltip-position="top" aria-label="https://docs.anthropic.com/claude-code" rel="noopener nofollow" class="external-link is-unresolved" href="https://docs.anthropic.com/claude-code" target="_self">Claude Code 공식 문서</a>
+<br><a data-tooltip-position="top" aria-label="https://github.com/anthropics/claude-code/issues" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/anthropics/claude-code/issues" target="_self">GitHub 이슈 리포트</a>
+마지막 업데이트: 2025-01-15]]></description><link>02.area/01.claude/주요-명령어.html</link><guid isPermaLink="false">02.area/01.claude/주요 명령어.md</guid><pubDate>Mon, 15 Sep 2025 13:56:19 GMT</pubDate></item><item><title><![CDATA[CLAUDE]]></title><description><![CDATA[This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.이 저장소는 AI 및 분석 도구에 중점을 둔 Obsidian 보관함으로, 특히 ccusage(Claude Code 토큰 사용량 분석기)에 대한 문서를 포함하고 있습니다. 보관함은 한국어로 구성되어 있으며 AI 관련 도구와 워크플로우의 지식 베이스 역할을 합니다.
+콘텐츠: AI 도구 및 분석에 중점을 둔 한국어 마크다운 파일들
+설정: 워크스페이스 및 플러그인 구성이 포함된 .obsidian/ 디렉토리가 있는 표준 Obsidian 보관함
+언어: 주요 콘텐츠는 한국어 모든 콘텐츠 파일에는 .md 확장자 사용
+내부 링크에는 Obsidian의 이중 대괄호 [[링크]] 문법 유지
+YAML 메타데이터가 포함된 기존 frontmatter 구조 준수 (title, created, updated, tags 등) 파일은 주로 한국어 사용
+문서는 명확한 제목이 있는 구조화된 형식을 따름
+분류를 위해 태그를 광범위하게 사용 (예: ccusage, claude-code, token-analysis)
+frontmatter를 통한 상태 추적 (status: active) 노트 연결 시각화를 위한 그래프 뷰
+알파벳 순 정렬이 있는 파일 탐색기
+검색 기능
+백링크 및 나가는 링크 추적
+빈도 정렬이 있는 태그 관리
+문서 구조를 위한 개요 뷰 그래프 뷰가 활성화된 주요 뷰
+왼쪽 사이드바: 파일 탐색기, 검색, 북마크
+오른쪽 사이드바: 백링크, 나가는 링크, 태그, 개요 (기본적으로 접혀 있음)
+빠른 액세스 도구가 있는 표준 Obsidian 리본
+콘텐츠를 생성하거나 편집할 때:
+확립된 한국어 문서 스타일을 따름
+적절한 메타데이터 필드가 있는 frontmatter 사용
+일관된 태그 분류 체계 유지
+명확한 제목과 섹션으로 콘텐츠 구조화
+[[]] 문법을 사용하여 관련 상호 참조 포함 이 보관함은 코드보다는 문서에 중점을 둔 것으로 보임
+빌드 명령어, 테스팅 프레임워크, 또는 개발 툴체인은 없음
+주요 워크플로우는 Obsidian을 통한 콘텐츠 생성 및 지식 관리
+]]></description><link>claude.html</link><guid isPermaLink="false">CLAUDE.md</guid><pubDate>Mon, 15 Sep 2025 13:47:54 GMT</pubDate></item><item><title><![CDATA[PRD]]></title><description><![CDATA[
 프로젝트명: n8n 기반 스레드 자동 콘텐츠 게시 시스템
 버전: v1.0
 작성일: 2025-09-23
@@ -625,96 +717,4 @@ v1.1 (예정): 1단계 구현 후 업데이트
 v2.0 (예정): 운영 데이터 기반 대폭 개선
 💡 이 PRD는 n8n 기반 스레드 자동 게시 시스템의 완전한 구현 가이드입니다. 각 단계별로 체크리스트를 활용하여 단계적으로 구현하시기 바랍니다.📅 마지막 업데이트: 2025-09-23
 📝 문서 버전: v1.0
-🔄 다음 리뷰: 1단계 구현 완료 후]]></description><link>01.project/스레드-자동-업로드/prd.html</link><guid isPermaLink="false">01.project/스레드 자동 업로드/PRD.md</guid><pubDate>Tue, 23 Sep 2025 13:45:26 GMT</pubDate></item><item><title><![CDATA[Claude Code 주요 명령어 가이드]]></title><description><![CDATA[Claude Code CLI의 핵심 명령어들과 실제 사용 예제를 정리한 참고 문서입니다.# 현재 디렉토리를 Claude Code 프로젝트로 초기화
-claude /init 코드베이스 분석 후 CLAUDE.md 파일 생성
-프로젝트 구조와 개발 가이드라인 자동 생성
-# Claude Code 사용법 확인
-claude /help
-# 특정 파일 내용 확인
-claude /read src/main.js # 여러 파일 동시 읽기
-claude /read src/main.js src/utils.js
-# 새 파일 생성
-claude /write src/new-file.js "console.log('Hello World');"
-# 기존 파일 수정
-claude /edit src/main.js
-# 패턴 검색
-claude /search "function.*authenticate" # 특정 파일 타입에서 검색
-claude /search "useState" --type js,jsx,ts,tsx
-# 파일명으로 검색
-claude /find "*.component.js" # 디렉토리 내 특정 패턴 파일 찾기
-claude /find "test" --pattern "*.spec.js"
-# 변경사항 커밋
-claude "commit these changes with a descriptive message" # 스테이징과 커밋 함께
-claude "add all files and commit with message: feat: add new feature"
-# 새 브랜치 생성 및 전환
-claude "create new branch feature/user-auth" # Pull Request 생성
-claude "create PR for current branch"
-# 프로젝트 빌드
-claude "build the project" # 테스트 실행
-claude "run tests" # 린팅 및 포맷팅
-claude "lint and format the code"
-# 의존성 설치
-claude "install express as dependency" # 개발 의존성 설치
-claude "install jest as dev dependency"
-# 여러 작업을 순차적으로 실행
-claude "run tests, fix any failures, then build the project" # 병렬 실행 지시
-claude "run lint and tests in parallel"
-# 조건부 실행
-claude "if tests pass, then deploy to staging" # 에러 핸들링
-claude "build project, if it fails show me the errors"
-# 코드 품질 분석
-claude "analyze code quality in src/ directory" # 리팩토링 제안
-claude "suggest improvements for performance in utils.js" # 보안 검사
-claude "check for security vulnerabilities in dependencies"
-# 새 React 프로젝트 초기화
-claude "create new React project with TypeScript and Tailwind" # Express API 서버 셋업
-claude "setup Express server with middleware for CORS and logging"
-# 에러 분석
-claude "analyze this error and suggest fixes: [에러 메시지]" # 성능 문제 해결
-claude "why is my app loading slowly? check bundle size and optimize"
-# 코드 리뷰 요청
-claude "review my code changes and suggest improvements" # 베스트 프랙티스 확인
-claude "check if this code follows React best practices"
-# API 문서 생성
-claude "generate API documentation for my Express routes" # README 업데이트
-claude "update README with installation and usage instructions" 구체적이고 명확한 요청
-예상 결과 명시
-제약사항 포함
-# 좋은 예
-claude "refactor this authentication function to use async/await instead of callbacks, maintaining the same API" # 개선이 필요한 예
-claude "fix this code"
-# 복잡한 작업을 단계별로 분할
-claude "first analyze the current database schema, then suggest migration steps for the new requirements"
-# 변경사항 검증 요청
-claude "implement this feature and run tests to verify it works correctly" 민감한 정보(API 키, 패스워드) 포함 금지
-프로덕션 데이터 직접 조작 시 주의 대용량 파일 처리 시 부분적으로 나누어 요청
-복잡한 작업은 단계별로 분할 커밋 메시지는 팀 컨벤션 준수
-코드 변경 전 백업 또는 브랜치 생성 <a data-href="ccusage" href="02.area/01.claude/ccusage.html" class="internal-link" target="_self" rel="noopener nofollow">ccusage</a> - Claude Code 토큰 사용량 분석
-<br><a data-tooltip-position="top" aria-label="https://docs.anthropic.com/claude-code" rel="noopener nofollow" class="external-link is-unresolved" href="https://docs.anthropic.com/claude-code" target="_self">Claude Code 공식 문서</a>
-<br><a data-tooltip-position="top" aria-label="https://github.com/anthropics/claude-code/issues" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/anthropics/claude-code/issues" target="_self">GitHub 이슈 리포트</a>
-마지막 업데이트: 2025-01-15]]></description><link>02.area/01.claude/주요-명령어.html</link><guid isPermaLink="false">02.area/01.claude/주요 명령어.md</guid><pubDate>Mon, 15 Sep 2025 13:56:19 GMT</pubDate></item><item><title><![CDATA[CLAUDE]]></title><description><![CDATA[This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.이 저장소는 AI 및 분석 도구에 중점을 둔 Obsidian 보관함으로, 특히 ccusage(Claude Code 토큰 사용량 분석기)에 대한 문서를 포함하고 있습니다. 보관함은 한국어로 구성되어 있으며 AI 관련 도구와 워크플로우의 지식 베이스 역할을 합니다.
-콘텐츠: AI 도구 및 분석에 중점을 둔 한국어 마크다운 파일들
-설정: 워크스페이스 및 플러그인 구성이 포함된 .obsidian/ 디렉토리가 있는 표준 Obsidian 보관함
-언어: 주요 콘텐츠는 한국어 모든 콘텐츠 파일에는 .md 확장자 사용
-내부 링크에는 Obsidian의 이중 대괄호 [[링크]] 문법 유지
-YAML 메타데이터가 포함된 기존 frontmatter 구조 준수 (title, created, updated, tags 등) 파일은 주로 한국어 사용
-문서는 명확한 제목이 있는 구조화된 형식을 따름
-분류를 위해 태그를 광범위하게 사용 (예: ccusage, claude-code, token-analysis)
-frontmatter를 통한 상태 추적 (status: active) 노트 연결 시각화를 위한 그래프 뷰
-알파벳 순 정렬이 있는 파일 탐색기
-검색 기능
-백링크 및 나가는 링크 추적
-빈도 정렬이 있는 태그 관리
-문서 구조를 위한 개요 뷰 그래프 뷰가 활성화된 주요 뷰
-왼쪽 사이드바: 파일 탐색기, 검색, 북마크
-오른쪽 사이드바: 백링크, 나가는 링크, 태그, 개요 (기본적으로 접혀 있음)
-빠른 액세스 도구가 있는 표준 Obsidian 리본
-콘텐츠를 생성하거나 편집할 때:
-확립된 한국어 문서 스타일을 따름
-적절한 메타데이터 필드가 있는 frontmatter 사용
-일관된 태그 분류 체계 유지
-명확한 제목과 섹션으로 콘텐츠 구조화
-[[]] 문법을 사용하여 관련 상호 참조 포함 이 보관함은 코드보다는 문서에 중점을 둔 것으로 보임
-빌드 명령어, 테스팅 프레임워크, 또는 개발 툴체인은 없음
-주요 워크플로우는 Obsidian을 통한 콘텐츠 생성 및 지식 관리
-]]></description><link>claude.html</link><guid isPermaLink="false">CLAUDE.md</guid><pubDate>Mon, 15 Sep 2025 13:47:54 GMT</pubDate></item></channel></rss>
+🔄 다음 리뷰: 1단계 구현 완료 후]]></description><link>01.project/스레드-자동-업로드/prd.html</link><guid isPermaLink="false">01.project/스레드 자동 업로드/PRD.md</guid><pubDate>Tue, 23 Sep 2025 13:45:26 GMT</pubDate></item></channel></rss>
