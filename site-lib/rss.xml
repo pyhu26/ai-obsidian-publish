@@ -1,4 +1,119 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[ai]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>site-lib/media/favicon.png</url><title>ai</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Sun, 28 Sep 2025 05:22:09 GMT</lastBuildDate><atom:link href="site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sun, 28 Sep 2025 05:22:00 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[무제]]></title><description><![CDATA[표25 resultSort0Filter0PropertiesNew이름<a class="internal-link" draggable="true">01.PRD-ph1</a><a class="internal-link" draggable="true">02.ToDo-ph1</a><a class="internal-link" draggable="true">무제.base</a><a class="internal-link" draggable="true">설치-및-테스트-가이드</a><a class="internal-link" draggable="true">주요 명령어</a><a class="internal-link" draggable="true">환경변수-설정-가이드</a><a class="internal-link" draggable="true">ccusage</a><a class="internal-link" draggable="true">CLAUDE</a><a class="internal-link" draggable="true">Emojify</a><a class="internal-link" draggable="true">Explain like I am 5</a><a class="internal-link" draggable="true">Fix grammar and spelling</a><a class="internal-link" draggable="true">Generate glossary</a><a class="internal-link" draggable="true">Generate table of contents</a><a class="internal-link" draggable="true">index</a><a class="internal-link" draggable="true">Make longer</a><a class="internal-link" draggable="true">Make shorter</a><a class="internal-link" draggable="true">prompt-templates</a><a class="internal-link" draggable="true">README</a><a class="internal-link" draggable="true">Remove URLs</a><a class="internal-link" draggable="true">Rewrite as tweet</a><a class="internal-link" draggable="true">Rewrite as tweet thread</a><a class="internal-link" draggable="true">Simplify</a><a class="internal-link" draggable="true">Summarize</a><a class="internal-link" draggable="true">threads-mvp-workflow.json</a><a class="internal-link" draggable="true">Translate to Chinese</a>]]></description><link>무제.html</link><guid isPermaLink="false">무제.base</guid><pubDate>Sun, 28 Sep 2025 05:21:44 GMT</pubDate></item><item><title><![CDATA[Generate glossary]]></title><description><![CDATA[Create a glossary of important terms, concepts, and phrases from {}. Format each entry as "Term: Definition". Sort entries alphabetically. Return only the glossary.]]></description><link>copilot/copilot-custom-prompts/generate-glossary.html</link><guid isPermaLink="false">copilot/copilot-custom-prompts/Generate glossary.md</guid><pubDate>Sat, 27 Sep 2025 14:50:45 GMT</pubDate></item><item><title><![CDATA[Remove URLs]]></title><description><![CDATA[Remove all URLs from {}. Preserve all other content and formatting. URLs may be in various formats (http, https, www). Return only the text with URLs removed.]]></description><link>copilot/copilot-custom-prompts/remove-urls.html</link><guid isPermaLink="false">copilot/copilot-custom-prompts/Remove URLs.md</guid><pubDate>Sat, 27 Sep 2025 14:50:45 GMT</pubDate></item><item><title><![CDATA[Rewrite as tweet]]></title><description><![CDATA[Rewrite {} as a single tweet with these requirements:
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[ai]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>site-lib/media/favicon.png</url><title>ai</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Mon, 06 Oct 2025 04:26:05 GMT</lastBuildDate><atom:link href="site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 06 Oct 2025 04:26:05 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[ChatGPT API 사용량 제한하기]]></title><description><![CDATA[OpenAI API를 사용하다 보면 예상치 못한 비용이 발생할 수 있습니다. 이를 방지하기 위해 OpenAI는 다양한 사용량 제한 및 예산 관리 기능을 제공합니다.
+예상치 못한 과금 방지
+프로젝트별 비용 관리
+개발/테스트 환경에서의 비용 통제
+조직 전체의 API 사용량 모니터링 Usage 모니터링: 실시간 사용량 추적
+Budget 설정: 월별 예산 한도 설정
+Rate Limits: API 호출 속도 제한
+Usage Alerts: 사용량 알림 설정 <a data-tooltip-position="top" aria-label="https://platform.openai.com" rel="noopener nofollow" class="external-link is-unresolved" href="https://platform.openai.com" target="_self">OpenAI Platform</a> 접속
+Settings &gt; Organization &gt; Usage 메뉴 선택
+<br>또는 직접 URL 접속: <a rel="noopener nofollow" class="external-link is-unresolved" href="https://platform.openai.com/settings/organization/usage" target="_self">https://platform.openai.com/settings/organization/usage</a>
+<br><img alt="OpenAI Usage Overview" src="https://i.imgur.com/Td0qNWn.png" referrerpolicy="no-referrer" target="_self" class="is-unresolved">
+선택한 기간 동안의 총 사용 금액
+일별 사용 금액 그래프로 시각화
+"Group by" 옵션으로 데이터 그룹화 가능 사용한 총 토큰 수 (입력 + 출력)
+토큰 사용량 추이 그래프
+API 효율성 분석에 활용 API 호출 총 횟수
+요청 패턴 분석 가능
+Usage 페이지에서는 다음과 같은 API 기능별로 사용량을 확인할 수 있습니다:
+Chat Completions: 대화형 API 사용량
+Images: 이미지 생성 사용량
+Web Searches: 웹 검색 기능 사용량
+File Searches: 파일 검색 사용량
+Embeddings: 임베딩 생성 사용량
+Audio Speeches: 음성 합성 사용량
+Audio Transcriptions: 음성 인식 사용량
+Vector Stores: 벡터 스토어 사용량
+Code Interpreter Sessions: 코드 인터프리터 사용량
+Moderation: 콘텐츠 검열 사용량
+각 기능별로 요청 수, 토큰 수, 이미지 수 등의 세부 지표를 확인할 수 있습니다.
+날짜 선택: 기본적으로 최근 2주간 데이터 표시
+프로젝트 필터: "All projects" 드롭다운으로 특정 프로젝트만 조회
+Export 기능: CSV 형식으로 사용량 데이터 다운로드
+<br><img alt="OpenAI Limits Overview" src="https://i.imgur.com/E7sg0vy.png" referrerpolicy="no-referrer" target="_self" class="is-unresolved">
+Settings &gt; Organization &gt; Limits 메뉴 선택
+"Organization budget" 섹션 확인
+Edit budget 버튼 클릭
+월별 예산 금액 입력 (예: $20.00)
+저장 예산은 매월 1일에 자동으로 리셋됩니다
+현재 사용량과 남은 예산을 한눈에 확인 가능
+예: $0.09 / $20.00 (현재 사용량 / 총 예산)
+"Resets in X days" 표시로 리셋까지 남은 일수 확인
+Add alert 버튼을 클릭하여 사용량 알림을 설정할 수 있습니다:
+예산의 80%를 사용했을 때 이메일 알림 발송
+비용 초과 전 사전 경고 예산을 모두 사용했을 때 이메일 알림 발송
+추가 비용 발생 전 즉각 대응 가능
+알림은 조직의 관리자 및 지정된 이메일 주소로 전송됩니다.API 사용량은 다음과 같은 속도 제한이 적용됩니다:
+분당 처리 가능한 최대 토큰 수
+모델별로 다른 제한 적용
+예: gpt-4o는 30,000 TPM RPM: 분당 최대 요청 수
+RPD: 일일 최대 요청 수
+대부분의 모델: 500 RPM
+Note: "Show all models" 버튼을 클릭하면 모든 모델의 제한 사항을 확인할 수 있습니다.<br>자세한 내용은 <a data-tooltip-position="top" aria-label="https://platform.openai.com/docs/guides/rate-limits" rel="noopener nofollow" class="external-link is-unresolved" href="https://platform.openai.com/docs/guides/rate-limits" target="_self">OpenAI Rate Limits 가이드</a>를 참조하세요.
+OpenAI가 조직에 허용하는 월별 최대 사용 금액
+Usage Tier에 따라 자동으로 조정
+예: 기본 제한은 $120.00/월
+OpenAI는 사용량에 따라 자동으로 티어를 업그레이드하는 시스템을 운영합니다. 티어가 올라갈수록 더 높은 Rate Limits와 Usage Limits가 적용됩니다.Limits 페이지 상단에서 현재 Usage tier를 확인할 수 있습니다.
+Limits 페이지 접속
+페이지 상단 "Usage tier X" 표시 확인
+"Increasing your limits" 섹션에서 상세 정보 확인
+Usage Tier 1 → Usage Tier 2 승급 조건:
+최소 사용 금액: 계정 생성 이후 최소 $50 사용
+최소 경과 시간: 첫 결제 성공 후 최소 7일 경과
+두 조건을 모두 충족하면 자동으로 다음 티어로 업그레이드됩니다.
+Tier 1: 기본 제한 (월 $120 한도)
+Tier 2: 증가된 Rate Limits 및 Usage Limits
+Tier 3+: 더욱 높은 제한 (대규모 프로덕션용)
+<br>각 티어별 상세 제한 사항은 <a data-tooltip-position="top" aria-label="https://platform.openai.com/docs/guides/rate-limits#usage-tiers" rel="noopener nofollow" class="external-link is-unresolved" href="https://platform.openai.com/docs/guides/rate-limits#usage-tiers" target="_self">Usage Tiers 문서</a>에서 확인할 수 있습니다.승급 진행 상황 확인:
+View payment history: 결제 이력 확인
+Buy credits: 크레딧 구매로 사용량 증가 개발 환경 분리 개발/테스트용 프로젝트와 프로덕션 프로젝트를 분리
+각 프로젝트별로 별도의 API 키 사용 적절한 예산 설정 초기에는 낮은 예산으로 시작 ($5-20)
+사용 패턴 파악 후 점진적으로 증가 모델 선택 최적화 간단한 작업에는 저렴한 모델 사용 (gpt-4o-mini)
+복잡한 작업에만 고성능 모델 사용 (gpt-4, o3) 토큰 사용량 최적화 불필요한 context 최소화
+max_tokens 파라미터로 응답 길이 제한
+시스템 프롬프트 간결하게 작성 정기적인 모니터링 주간/월간 사용량 리포트 확인
+비정상적인 사용 패턴 조기 발견 80% 알림은 필수 예산 초과 전에 대응할 수 있는 여유 확보
+필요시 예산 조정 또는 사용량 제한 100% 알림 설정 예산 초과 시점 즉시 인지
+추가 비용 발생 방지 여러 담당자에게 알림 전송 조직 관리자뿐만 아니라 개발 팀장에게도 알림
+빠른 대응을 위한 다중 알림 체계 구축 Slack/Discord 연동 고려 Webhook을 활용한 실시간 알림
+팀 전체가 사용량 인지 <br><a data-href="OpenAI Platform 설정 가이드" href=".html" class="internal-link" target="_self" rel="noopener nofollow">OpenAI Platform 설정 가이드</a>
+<br><a data-href="API 키 관리 방법" href=".html" class="internal-link" target="_self" rel="noopener nofollow">API 키 관리 방법</a>
+<br><a data-href="토큰 사용량 최적화 전략" href=".html" class="internal-link" target="_self" rel="noopener nofollow">토큰 사용량 최적화 전략</a> <br><a data-tooltip-position="top" aria-label="https://platform.openai.com/settings/organization/usage" rel="noopener nofollow" class="external-link is-unresolved" href="https://platform.openai.com/settings/organization/usage" target="_self">OpenAI Platform - Usage</a>
+<br><a data-tooltip-position="top" aria-label="https://platform.openai.com/settings/organization/limits" rel="noopener nofollow" class="external-link is-unresolved" href="https://platform.openai.com/settings/organization/limits" target="_self">OpenAI Platform - Limits</a>
+<br><a data-tooltip-position="top" aria-label="https://platform.openai.com/docs/guides/rate-limits" rel="noopener nofollow" class="external-link is-unresolved" href="https://platform.openai.com/docs/guides/rate-limits" target="_self">OpenAI Rate Limits Documentation</a>
+<br><a data-tooltip-position="top" aria-label="https://platform.openai.com/docs/guides/rate-limits#usage-tiers" rel="noopener nofollow" class="external-link is-unresolved" href="https://platform.openai.com/docs/guides/rate-limits#usage-tiers" target="_self">OpenAI Usage Tiers Documentation</a>
+]]></description><link>02.area/chatgpt/chatgpt-api-사용량-제한하기.html</link><guid isPermaLink="false">02.area/chatgpt/chatgpt API 사용량 제한하기.md</guid><pubDate>Mon, 06 Oct 2025 04:12:12 GMT</pubDate><enclosure url="https://i.imgur.com/Td0qNWn.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="https://i.imgur.com/Td0qNWn.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[limits-overview]]></title><description><![CDATA[<img src="02.area/chatgpt/limits-overview.png" target="_self">]]></description><link>02.area/chatgpt/limits-overview.html</link><guid isPermaLink="false">02.area/chatgpt/limits-overview.png</guid><pubDate>Mon, 06 Oct 2025 03:48:10 GMT</pubDate><enclosure url="02.area/chatgpt/limits-overview.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="02.area/chatgpt/limits-overview.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[usage-overview]]></title><description><![CDATA[<img src="02.area/chatgpt/usage-overview.png" target="_self">]]></description><link>02.area/chatgpt/usage-overview.html</link><guid isPermaLink="false">02.area/chatgpt/usage-overview.png</guid><pubDate>Mon, 06 Oct 2025 03:47:41 GMT</pubDate><enclosure url="02.area/chatgpt/usage-overview.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src="02.area/chatgpt/usage-overview.png"&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[ccusage - Claude Code Token Usage Analyzer]]></title><description><![CDATA[Claude Code의 토큰 사용량과 비용을 로컬 JSONL 파일에서 분석하는 CLI 도구입니다.
+📊 일별/월별/세션별 사용량 리포트
+💰 실시간 비용 추적 및 모니터링
+🎯 Claude 모델별 토큰 및 비용 분석
+📅 날짜, 프로젝트, 시간대별 필터링
+📱 컴팩트 및 JSON 출력 옵션
+🌐 다중 로케일 및 시간대 지원
+⚡ 초소형 번들 사이즈
+bunx ccusage # 가장 빠른 방법
+npx ccusage@latest # 대안
+npm install -g ccusage ccusage - 기본 일별 리포트
+ccusage daily - 상세한 일별 토큰 사용량
+ccusage monthly - 월별 집계 리포트
+ccusage session - 대화 세션별 사용량
+ccusage blocks - 5시간 빌링 윈도우 추적 ccusage blocks --live - 실시간 사용량 대시보드 --since [날짜] - 시작 날짜 지정
+--until [날짜] - 종료 날짜 지정 --json - JSON 형태로 데이터 내보내기
+--compact - 압축된 표시 모드
+--breakdown - 모델별 비용 분석 --instances - 프로젝트별 그룹화
+ccusage daily
+ccusage monthly --since 2025-01-01 --until 2025-01-31
+ccusage blocks --live
+ccusage session --json --breakdown blocks --live로 실시간 사용량 추적
+일별 리포트로 패턴 파악 --breakdown 플래그로 모델별 비용 분석
+월별 리포트로 예산 관리 --instances로 프로젝트별 사용량 분리
+세션별 분석으로 효율성 측정 --json 출력으로 추가 분석
+특정 기간 필터링으로 트렌드 파악 초소형 번들 사이즈로 빠른 실행
+오프라인 가격 데이터 지원 컬러풀하고 반응형 출력
+직관적인 CLI 인터페이스 다양한 리포트 형식 제공
+세분화된 사용량 추적 <a data-tooltip-position="top" aria-label="https://ccusage.com" rel="noopener nofollow" class="external-link is-unresolved" href="https://ccusage.com" target="_self">공식 사이트</a>
+<br><a data-tooltip-position="top" aria-label="https://github.com/ryoppippi/ccusage" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/ryoppippi/ccusage" target="_self">GitHub 리포지토리</a>
+<br><a data-tooltip-position="top" aria-label="https://docs.anthropic.com/claude-code" rel="noopener nofollow" class="external-link is-unresolved" href="https://docs.anthropic.com/claude-code" target="_self">Claude Code 공식 문서</a>
+마지막 업데이트: 2025-09-14]]></description><link>02.area/claude/ccusage.html</link><guid isPermaLink="false">02.area/claude/ccusage.md</guid><pubDate>Fri, 26 Sep 2025 14:20:43 GMT</pubDate></item><item><title><![CDATA[무제]]></title><description><![CDATA[표25 resultSort0Filter0PropertiesNew이름<a class="internal-link" draggable="true">01.PRD-ph1</a><a class="internal-link" draggable="true">02.ToDo-ph1</a><a class="internal-link" draggable="true">무제.base</a><a class="internal-link" draggable="true">설치-및-테스트-가이드</a><a class="internal-link" draggable="true">주요 명령어</a><a class="internal-link" draggable="true">환경변수-설정-가이드</a><a class="internal-link" draggable="true">ccusage</a><a class="internal-link" draggable="true">CLAUDE</a><a class="internal-link" draggable="true">Emojify</a><a class="internal-link" draggable="true">Explain like I am 5</a><a class="internal-link" draggable="true">Fix grammar and spelling</a><a class="internal-link" draggable="true">Generate glossary</a><a class="internal-link" draggable="true">Generate table of contents</a><a class="internal-link" draggable="true">index</a><a class="internal-link" draggable="true">Make longer</a><a class="internal-link" draggable="true">Make shorter</a><a class="internal-link" draggable="true">prompt-templates</a><a class="internal-link" draggable="true">README</a><a class="internal-link" draggable="true">Remove URLs</a><a class="internal-link" draggable="true">Rewrite as tweet</a><a class="internal-link" draggable="true">Rewrite as tweet thread</a><a class="internal-link" draggable="true">Simplify</a><a class="internal-link" draggable="true">Summarize</a><a class="internal-link" draggable="true">threads-mvp-workflow.json</a><a class="internal-link" draggable="true">Translate to Chinese</a>]]></description><link>무제.html</link><guid isPermaLink="false">무제.base</guid><pubDate>Sun, 28 Sep 2025 05:21:44 GMT</pubDate></item><item><title><![CDATA[Generate glossary]]></title><description><![CDATA[Create a glossary of important terms, concepts, and phrases from {}. Format each entry as "Term: Definition". Sort entries alphabetically. Return only the glossary.]]></description><link>copilot/copilot-custom-prompts/generate-glossary.html</link><guid isPermaLink="false">copilot/copilot-custom-prompts/Generate glossary.md</guid><pubDate>Sat, 27 Sep 2025 14:50:45 GMT</pubDate></item><item><title><![CDATA[Remove URLs]]></title><description><![CDATA[Remove all URLs from {}. Preserve all other content and formatting. URLs may be in various formats (http, https, www). Return only the text with URLs removed.]]></description><link>copilot/copilot-custom-prompts/remove-urls.html</link><guid isPermaLink="false">copilot/copilot-custom-prompts/Remove URLs.md</guid><pubDate>Sat, 27 Sep 2025 14:50:45 GMT</pubDate></item><item><title><![CDATA[Rewrite as tweet]]></title><description><![CDATA[Rewrite {} as a single tweet with these requirements:
 1. Maximum 280 characters
 2. Use concise, impactful language
 3. Maintain the core message
