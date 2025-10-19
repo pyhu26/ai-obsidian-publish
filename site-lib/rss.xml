@@ -1,4 +1,835 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[ai]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>site-lib/media/favicon.png</url><title>ai</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Mon, 06 Oct 2025 04:26:05 GMT</lastBuildDate><atom:link href="site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 06 Oct 2025 04:26:05 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[ChatGPT API 사용량 제한하기]]></title><description><![CDATA[OpenAI API를 사용하다 보면 예상치 못한 비용이 발생할 수 있습니다. 이를 방지하기 위해 OpenAI는 다양한 사용량 제한 및 예산 관리 기능을 제공합니다.
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[ai]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>site-lib/media/favicon.png</url><title>ai</title><link/></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Sun, 19 Oct 2025 03:03:36 GMT</lastBuildDate><atom:link href="site-lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sun, 19 Oct 2025 03:03:33 GMT</pubDate><ttl>60</ttl><dc:creator/><item><title><![CDATA[08-반응형-디자인-최적화]]></title><description><![CDATA[
+"모바일, 태블릿, 데스크톱 모든 화면에서 잘 보이도록 반응형으로 만들어줘. 차트가 화면 크기에 맞게 자동으로 조절되고, 모바일에서도 터치하기 쉽게 해줘. 그리고 다크 모드도 지원하면 좋겠어. 눈이 피로하지 않게." ✅ 모바일/태블릿/데스크톱 반응형 레이아웃
+✅ Tailwind CSS 반응형 브레이크포인트 활용
+✅ 터치 친화적 UI (버튼 크기, 간격)
+✅ 다크 모드 지원 및 토글 기능
+✅ 시스템 다크 모드 자동 감지
+✅ LocalStorage로 다크 모드 설정 저장
+✅ 차트 반응형 크기 조절
+src/hooks/useDarkMode.tsimport { useEffect, useState } from 'react'; export function useDarkMode() { const [isDark, setIsDark] = useState(() =&gt; { // 1순위: 로컬스토리지에 저장된 사용자 설정 const saved = localStorage.getItem('darkMode'); if (saved !== null) { return saved === 'true'; } // 2순위: 시스템 설정 확인 return window.matchMedia('(prefers-color-scheme: dark)').matches; }); useEffect(() =&gt; { const root = window.document.documentElement; // HTML 루트 요소에 'dark' 클래스 추가/제거 if (isDark) { root.classList.add('dark'); } else { root.classList.remove('dark'); } // LocalStorage에 설정 저장 localStorage.setItem('darkMode', isDark.toString()); }, [isDark]); const toggleDarkMode = () =&gt; setIsDark(!isDark); return { isDark, toggleDarkMode };
+}
+다크 모드 우선순위
+사용자가 설정한 값 (LocalStorage)
+시스템 설정 (prefers-color-scheme)
+기본값 (라이트 모드)
+tailwind.config.jsexport default { darkMode: 'class', // 클래스 기반 다크 모드 content: [ "./index.html", "./src/**/*.{js,ts,jsx,tsx}", ], theme: { extend: {}, }, plugins: [],
+}
+darkMode: 'class'
+dark: 접두사로 다크 모드 스타일 적용
+HTML에 dark 클래스가 있을 때만 활성화
+사용자 제어 가능 (시스템 설정 무시 가능)
+src/components/Dashboard.tsxexport function Dashboard() { const { data, isLoading, error } = useMarketData(); const { isDark, toggleDarkMode } = useDarkMode(); return ( &lt;div className="min-h-screen bg-gray-50 dark:bg-gray-900"&gt; &lt;div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8"&gt; {/* 헤더 */} &lt;header className="mb-6 sm:mb-8"&gt; &lt;div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6"&gt; &lt;h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white"&gt; 📊 코인 트렌드 대시보드 &lt;/h1&gt; {/* 다크 모드 토글 버튼 */} &lt;button onClick={toggleDarkMode} className="self-start sm:self-auto px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" aria-label="다크 모드 토글" &gt; {isDark ? '🌙 다크' : '☀️ 라이트'} &lt;/button&gt; &lt;/div&gt; {/* 통계 카드 - 반응형 그리드 */} &lt;div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"&gt; &lt;div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6"&gt; &lt;div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1"&gt; 총 마켓 수 &lt;/div&gt; &lt;div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white"&gt; {stats.totalMarkets} &lt;/div&gt; &lt;/div&gt; &lt;div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6"&gt; &lt;div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1"&gt; 평균 트렌드 &lt;/div&gt; &lt;div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400"&gt; {stats.averageTrend.toFixed(3)} &lt;/div&gt; &lt;/div&gt; &lt;div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6"&gt; &lt;div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1"&gt; 상승세 마켓 &lt;/div&gt; &lt;div className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400"&gt; {stats.positiveTrendCount} &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/header&gt; {/* 차트 영역 */} &lt;div className="space-y-4 sm:space-y-6 lg:space-y-8"&gt; &lt;div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6"&gt; &lt;h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4"&gt; 📈 트렌드 가중치 차트 &lt;/h2&gt; &lt;TrendBarChart data={filteredData} /&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; );
+}
+반응형 패턴// 텍스트 크기
+text-2xl sm:text-3xl lg:text-4xl
+// 모바일: 2xl, 태블릿: 3xl, 데스크톱: 4xl // 패딩
+px-3 sm:px-4 lg:px-6
+// 모바일: 12px, 태블릿: 16px, 데스크톱: 24px // 그리드 레이아웃
+grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+// 모바일: 1열, 태블릿: 2열, 데스크톱: 3열 // 간격
+gap-3 sm:gap-4
+// 모바일: 12px, 태블릿: 16px
+다크 모드 스타일// 배경색
+bg-gray-50 dark:bg-gray-900 // 텍스트 색상
+text-gray-900 dark:text-white // 카드 배경
+bg-white dark:bg-gray-800 // 보조 텍스트
+text-gray-500 dark:text-gray-400 // 강조 색상
+text-blue-600 dark:text-blue-400
+src/components/FilterPanel.tsxexport function FilterPanel({ filters, onFiltersChange, onReset, ...
+}: FilterPanelProps) { return ( &lt;div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6 mb-4 sm:mb-6"&gt; {/* 헤더 - 모바일에서 세로 배치 */} &lt;div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6"&gt; &lt;h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white"&gt; 🔍 필터 옵션 &lt;/h2&gt; {/* 버튼 그룹 - 모바일 친화적 크기 */} &lt;div className="flex flex-wrap gap-2"&gt; &lt;button className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors whitespace-nowrap"&gt; 불러오기 &lt;/button&gt; &lt;button className="px-2 sm:px-3 py-1 text-xs sm:text-sm ..."&gt; 저장 &lt;/button&gt; &lt;button className="px-2 sm:px-3 py-1 text-xs sm:text-sm ..."&gt; 초기화 &lt;/button&gt; &lt;/div&gt; &lt;/div&gt; {/* 검색 입력 */} &lt;div&gt; &lt;label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"&gt; 마켓명 검색 &lt;/label&gt; &lt;input type="text" value={filters.searchText} onChange={(e) =&gt; handleSearchChange(e.target.value)} placeholder="KRW-BTC, KRW-ETH..." className="w-full px-3 sm:px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400" /&gt; &lt;/div&gt; {/* 슬라이더 - 터치 친화적 */} &lt;div&gt; &lt;label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"&gt; 트렌드 가중치: {filters.trendRange[0].toFixed(3)} ~ {filters.trendRange[1].toFixed(3)} &lt;/label&gt; &lt;div className="space-y-2"&gt; &lt;div className="flex items-center gap-2 sm:gap-4"&gt; &lt;span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 w-10 sm:w-12"&gt; 최소 &lt;/span&gt; &lt;input type="range" className="flex-1 accent-blue-600 dark:accent-blue-400" style={{ minHeight: '44px' }} // 터치 타겟 최소 크기 {...sliderProps} /&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; {/* 정렬 버튼 - 모바일에서 줄바꿈 */} &lt;div&gt; &lt;label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"&gt; 정렬 기준 &lt;/label&gt; &lt;div className="flex flex-wrap sm:flex-nowrap gap-2"&gt; &lt;button className="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm rounded-lg ..."&gt; 트렌드 {filters.sortBy === 'trend' &amp;&amp; getSortIcon()} &lt;/button&gt; &lt;button className="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm ..."&gt; 가격 {filters.sortBy === 'price' &amp;&amp; getSortIcon()} &lt;/button&gt; &lt;button className="flex-1 px-2 sm:px-4 py-2 text-xs sm:text-sm ..."&gt; 이름 {filters.sortBy === 'name' &amp;&amp; getSortIcon()} &lt;/button&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; );
+}
+모바일 최적화 요소
+터치 타겟 크기: 최소 44x44px (iOS 가이드라인)
+flex-wrap: 버튼이 작은 화면에서 줄바꿈
+whitespace-nowrap: 버튼 텍스트 줄바꿈 방지
+간격 조절: 모바일에서 더 작은 gap
+src/components/PresetModal.tsxexport function PresetModal({ isOpen, onClose, ... }: PresetModalProps) { if (!isOpen) return null; return ( &lt;div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"&gt; &lt;div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 max-w-md w-full mx-4"&gt; &lt;h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4"&gt; 필터 프리셋 관리 &lt;/h3&gt; {/* 프리셋 목록 - 모바일 스크롤 */} &lt;div className="space-y-2 mt-4 max-h-60 sm:max-h-96 overflow-y-auto"&gt; {presets.map((preset) =&gt; ( &lt;div key={preset.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded gap-2" &gt; &lt;div className="flex-1"&gt; &lt;div className="font-medium text-gray-900 dark:text-white"&gt; {preset.name} &lt;/div&gt; &lt;div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400"&gt; {new Date(preset.createdAt).toLocaleDateString('ko-KR')} &lt;/div&gt; &lt;/div&gt; &lt;div className="flex gap-2"&gt; &lt;button className="px-3 py-1 text-xs sm:text-sm bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded ..."&gt; 불러오기 &lt;/button&gt; &lt;button className="px-3 py-1 text-xs sm:text-sm bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded ..."&gt; 삭제 &lt;/button&gt; &lt;/div&gt; &lt;/div&gt; ))} &lt;/div&gt; &lt;button onClick={onClose} className="mt-4 w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" &gt; 닫기 &lt;/button&gt; &lt;/div&gt; &lt;/div&gt; );
+}
+모달 반응형 특징
+p-4: 모바일에서 화면 가장자리 여백
+max-h-60 sm:max-h-96: 모바일에서 더 낮은 최대 높이
+overflow-y-auto: 프리셋 많을 때 스크롤
+// Recharts의 ResponsiveContainer는 자동으로 반응형 처리
+&lt;ResponsiveContainer width="100%" height={400}&gt; &lt;BarChart data={chartData}&gt; &lt;XAxis dataKey="market_name" angle={-45} textAnchor="end" height={100} tick={{ fontSize: 12 }} // 모바일에서도 읽기 좋은 크기 /&gt; &lt;/BarChart&gt;
+&lt;/ResponsiveContainer&gt;
+📱 모바일 (&lt; 640px)
+┌─────────────────┐
+│ 📊 제목 │
+│ 🌙 다크 버튼 │
+├─────────────────┤
+│ ┌───────────┐ │
+│ │총 마켓 수 │ │
+│ └───────────┘ │
+│ ┌───────────┐ │
+│ │평균 트렌드│ │
+│ └───────────┘ │
+│ ┌───────────┐ │
+│ │상승세 │ │
+│ └───────────┘ │
+├─────────────────┤
+│ [차트 - 전체] │
+└─────────────────┘ 📱 태블릿 (640px ~ 1024px)
+┌───────────────────────────┐
+│ 📊 제목 🌙 다크 │
+├───────────────────────────┤
+│ ┌──────┐ ┌──────┐ │
+│ │총마켓│ │평균 │ │
+│ └──────┘ └──────┘ │
+│ ┌──────┐ │
+│ │상승세│ │
+│ └──────┘ │
+├───────────────────────────┤
+│ [차트 - 전체] │
+└───────────────────────────┘ 💻 데스크톱 (≥ 1024px)
+┌─────────────────────────────────┐
+│ 📊 제목 🌙 다크 │
+├─────────────────────────────────┤
+│ ┌─────┐ ┌─────┐ ┌─────┐ │
+│ │총 │ │평균 │ │상승 │ │
+│ │마켓 │ │트렌 │ │세 │ │
+│ └─────┘ └─────┘ └─────┘ │
+├─────────────────────────────────┤
+│ [차트 - 전체 너비] │
+└─────────────────────────────────┘
+라이트 모드배경: gray-50 (#F9FAFB)
+카드: white (#FFFFFF)
+텍스트: gray-900 (#111827)
+보조 텍스트: gray-500 (#6B7280)
+강조: blue-600 (#2563EB)
+다크 모드배경: gray-900 (#111827)
+카드: gray-800 (#1F2937)
+텍스트: white (#FFFFFF)
+보조 텍스트: gray-400 (#9CA3AF)
+강조: blue-400 (#60A5FA)
+// tailwind.config.js
+{ darkMode: 'class', // HTML 클래스로 제어 // darkMode: 'media' // 시스템 설정으로만 제어 (사용자가 바꿀 수 없음)
+}
+// 사용
+&lt;div className="bg-white dark:bg-gray-800"&gt; &lt;p className="text-gray-900 dark:text-white"&gt;텍스트&lt;/p&gt;
+&lt;/div&gt;
+// CSS Media Query
+const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches; // 변경 감지
+const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+mediaQuery.addEventListener('change', (e) =&gt; { console.log('다크 모드:', e.matches);
+});
+// ❌ 나쁜 예: 터치하기 어려움
+&lt;button className="px-1 py-0.5 text-xs"&gt;버튼&lt;/button&gt; // ✅ 좋은 예: 최소 44x44px
+&lt;button className="px-4 py-2 text-sm min-h-[44px]"&gt;버튼&lt;/button&gt;
+iOS Human Interface Guidelines
+터치 타겟 최소 크기: 44x44pt
+버튼 간 최소 간격: 8pt
+// Mobile-First 접근
+// 1. 기본 스타일 = 모바일
+className="text-sm px-3 py-2" // 2. 태블릿 이상 (sm:)
+className="text-sm sm:text-base sm:px-4 sm:py-2" // 3. 데스크톱 (lg:)
+className="text-sm sm:text-base lg:text-lg lg:px-6 lg:py-3"
+// LocalStorage: 브라우저 종료해도 유지
+localStorage.setItem('darkMode', 'true'); // SessionStorage: 탭 닫으면 삭제
+sessionStorage.setItem('tempData', 'value');
+다크 모드는 LocalStorage 사용 권장
+사용자의 선호도는 영구적으로 저장
+다른 탭에서도 동일한 설정 유지
+원인: React가 마운트되기 전 기본 라이트 모드로 표시해결: 인라인 스크립트로 초기 클래스 설정&lt;!-- index.html --&gt;
+&lt;script&gt; const isDark = localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches); if (isDark) { document.documentElement.classList.add('dark'); }
+&lt;/script&gt;
+원인: 데스크톱 기준으로만 디자인해결: 최소 터치 타겟 크기 보장&lt;button className="min-h-[44px] min-w-[44px] px-4 py-2"&gt; 버튼
+&lt;/button&gt;
+원인: Recharts 기본 색상이 어두운 배경에 안 보임해결: 다크 모드에 맞는 색상 사용// 라이트 모드: 진한 색
+stroke={isDark ? "#60A5FA" : "#2563EB"} // blue-400 vs blue-600 // 또는 CSS 변수 활용
+&lt;Line stroke="var(--chart-color)" /&gt;
+:root { --chart-color: #2563EB;
+} .dark { --chart-color: #60A5FA;
+}
+원인: 브레이크포인트 사이의 크기 고려 안 함해결: 모든 브레이크포인트 테스트// Chrome DevTools - Responsive Mode
+// 320px (iPhone SE)
+// 375px (iPhone 12)
+// 768px (iPad)
+// 1024px (iPad Pro)
+// 1920px (Desktop)
+이 시리즈를 통해 만든 코인 대시보드는:
+✅ Supabase 실시간 데이터 연동
+✅ 다양한 차트 (Bar, Scatter, Line)
+✅ 고급 필터링 및 프리셋
+✅ 완전한 반응형 디자인
+✅ 다크 모드 지원
+모든 기능이 완성되었습니다!
+<a data-tooltip-position="top" aria-label="https://github.com/pyhu26/coin-dashboard" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/pyhu26/coin-dashboard" target="_self">GitHub Repo</a>
+<br><a data-tooltip-position="top" aria-label="https://sparkly-pony-ae3435.netlify.app/" rel="noopener nofollow" class="external-link is-unresolved" href="https://sparkly-pony-ae3435.netlify.app/" target="_self">완성 웹사이트</a>
+관련 커밋: 26222ca
+이 시리즈는 Claude Code와 함께하는 실제 개발 과정을 기록한 바이브 코딩기입니다.]]></description><link>01.project/coin-대시보드/08-반응형-디자인-최적화.html</link><guid isPermaLink="false">01.project/Coin 대시보드/08-반응형-디자인-최적화.md</guid><pubDate>Sun, 19 Oct 2025 02:57:11 GMT</pubDate></item><item><title><![CDATA[07-고급-필터링-기능-구현]]></title><description><![CDATA[
+"데이터를 더 세밀하게 분석할 수 있도록 다양한 필터 기능을 만들어줘. 트렌드 가중치와 가격 범위를 슬라이더로 조절하고, 마켓명 검색도 되게 해줘. 정렬 옵션도 추가하고, 자주 사용하는 필터 조합은 프리셋으로 저장할 수 있게 해줘. 그리고 URL로 필터 상태를 공유할 수 있으면 좋겠어." ✅ 트렌드 가중치 범위 필터 (듀얼 슬라이더)
+✅ 가격 범위 필터 (듀얼 슬라이더)
+✅ 마켓명 검색 기능
+✅ 정렬 옵션 (트렌드/가격/이름, 오름/내림차순)
+✅ 필터 프리셋 저장/불러오기/삭제
+✅ 필터 초기화 버튼
+✅ URL 쿼리 파라미터 자동 동기화
+src/types/index.tsexport interface FilterOptions { trendRange: [number, number]; // [최소, 최대] priceRange: [number, number]; // [최소, 최대] searchText: string; // 검색어 sortBy: 'trend' | 'price' | 'name'; // 정렬 기준 sortOrder: 'asc' | 'desc'; // 정렬 순서
+} export interface FilterPreset { id: string; name: string; filters: FilterOptions; createdAt: string;
+}
+타입 설계 특징
+trendRange, priceRange: 튜플 타입으로 최소/최대값 표현
+sortBy: 유니온 타입으로 허용 값 제한
+FilterPreset: 저장된 필터 조합
+src/hooks/useFilter.tsexport function useFilter(data: MarketData[]) { const [filters, setFilters] = useState&lt;FilterOptions&gt;(DEFAULT_FILTERS); // 데이터의 최소/최대값 자동 계산 const dataRange = useMemo(() =&gt; { if (!data || data.length === 0) { return { minTrend: 0, maxTrend: 1, minPrice: 0, maxPrice: 100000000 }; } const trends = data.map((d) =&gt; d.trend_weight); const prices = data.map((d) =&gt; d.last_high_price); return { minTrend: Math.min(...trends), maxTrend: Math.max(...trends), minPrice: Math.min(...prices), maxPrice: Math.max(...prices), }; }, [data]); // URL 쿼리 파라미터에서 필터 초기화 useEffect(() =&gt; { const params = new URLSearchParams(window.location.search); const urlFilters: FilterOptions = { trendRange: [ params.get('trendMin') ? parseFloat(params.get('trendMin')!) : dataRange.minTrend, params.get('trendMax') ? parseFloat(params.get('trendMax')!) : dataRange.maxTrend, ], priceRange: [ params.get('priceMin') ? parseFloat(params.get('priceMin')!) : dataRange.minPrice, params.get('priceMax') ? parseFloat(params.get('priceMax')!) : dataRange.maxPrice, ], searchText: params.get('search') || '', sortBy: (params.get('sortBy') as FilterOptions['sortBy']) || 'trend', sortOrder: (params.get('sortOrder') as FilterOptions['sortOrder']) || 'desc', }; setFilters(urlFilters); }, [dataRange]); // 필터 변경 시 URL 자동 업데이트 useEffect(() =&gt; { const params = new URLSearchParams(); // 기본값과 다를 때만 URL에 추가 (깔끔한 URL 유지) if (filters.trendRange[0] !== dataRange.minTrend) { params.set('trendMin', filters.trendRange[0].toString()); } if (filters.trendRange[1] !== dataRange.maxTrend) { params.set('trendMax', filters.trendRange[1].toString()); } // ... 나머지 필터들도 동일 const newUrl = params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname; window.history.replaceState({}, '', newUrl); }, [filters, dataRange]); // 필터링 및 정렬된 데이터 const filteredData = useMemo(() =&gt; { if (!data) return []; let result = data.filter((item) =&gt; { // 트렌드 가중치 필터 if (item.trend_weight &lt; filters.trendRange[0] || item.trend_weight &gt; filters.trendRange[1]) { return false; } // 가격 범위 필터 if (item.last_high_price &lt; filters.priceRange[0] || item.last_high_price &gt; filters.priceRange[1]) { return false; } // 마켓명 검색 if (filters.searchText) { const searchLower = filters.searchText.toLowerCase(); if (!item.market_name.toLowerCase().includes(searchLower)) { return false; } } return true; }); // 정렬 result.sort((a, b) =&gt; { let compareValue = 0; switch (filters.sortBy) { case 'trend': compareValue = a.trend_weight - b.trend_weight; break; case 'price': compareValue = a.last_high_price - b.last_high_price; break; case 'name': compareValue = a.market_name.localeCompare(b.market_name); break; } return filters.sortOrder === 'asc' ? compareValue : -compareValue; }); return result; }, [data, filters]); return { filters, setFilters, filteredData, resetFilters, dataRange };
+}
+핵심 구현
+데이터 범위 자동 계산: 실제 데이터의 최소/최대값을 useMemo로 계산
+URL 동기화: 양방향 동기화 (URL → 필터, 필터 → URL)
+필터링 로직: filter 메서드로 모든 조건 검증
+정렬 로직: sort 메서드로 선택된 기준에 따라 정렬
+src/hooks/useFilterPresets.tsconst STORAGE_KEY = 'filter_presets'; export function useFilterPresets() { const [presets, setPresets] = useState&lt;FilterPreset[]&gt;([]); // 로컬스토리지에서 프리셋 불러오기 useEffect(() =&gt; { const stored = localStorage.getItem(STORAGE_KEY); if (stored) { try { const parsed = JSON.parse(stored); setPresets(parsed); } catch (error) { console.error('프리셋 불러오기 오류:', error); } } }, []); // 프리셋 저장 const savePreset = (name: string, filters: FilterOptions) =&gt; { const newPreset: FilterPreset = { id: Date.now().toString(), name, filters, createdAt: new Date().toISOString(), }; const updatedPresets = [...presets, newPreset]; setPresets(updatedPresets); localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedPresets)); }; // 프리셋 삭제 const deletePreset = (id: string) =&gt; { const updatedPresets = presets.filter((p) =&gt; p.id !== id); setPresets(updatedPresets); localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedPresets)); }; // 프리셋 적용 const loadPreset = (id: string): FilterOptions | null =&gt; { const preset = presets.find((p) =&gt; p.id === id); return preset ? preset.filters : null; }; return { presets, savePreset, deletePreset, loadPreset };
+}
+LocalStorage 패턴
+컴포넌트 마운트 시 자동 로드
+상태 변경 시 즉시 LocalStorage에 저장
+브라우저 재시작 후에도 프리셋 유지
+src/components/FilterPanel.tsxexport function FilterPanel({ filters, onFiltersChange, onReset, minTrend, maxTrend, minPrice, maxPrice, onSavePreset, onLoadPreset,
+}: FilterPanelProps) { const handleTrendRangeChange = (index: 0 | 1, value: number) =&gt; { const newRange: [number, number] = [...filters.trendRange]; newRange[index] = value; onFiltersChange({ ...filters, trendRange: newRange }); }; return ( &lt;div className="bg-white rounded-lg shadow p-6 mb-6"&gt; &lt;div className="flex items-center justify-between mb-6"&gt; &lt;h2 className="text-xl font-bold text-gray-900"&gt;🔍 필터 옵션&lt;/h2&gt; &lt;div className="flex gap-2"&gt; &lt;button onClick={onLoadPreset}&gt;불러오기&lt;/button&gt; &lt;button onClick={onSavePreset}&gt;저장&lt;/button&gt; &lt;button onClick={onReset}&gt;초기화&lt;/button&gt; &lt;/div&gt; &lt;/div&gt; {/* 마켓명 검색 */} &lt;div&gt; &lt;label&gt;마켓명 검색&lt;/label&gt; &lt;input type="text" value={filters.searchText} onChange={(e) =&gt; onFiltersChange({ ...filters, searchText: e.target.value })} placeholder="KRW-BTC, KRW-ETH..." /&gt; &lt;/div&gt; {/* 트렌드 가중치 범위 (듀얼 슬라이더) */} &lt;div&gt; &lt;label&gt; 트렌드 가중치: {filters.trendRange[0].toFixed(3)} ~ {filters.trendRange[1].toFixed(3)} &lt;/label&gt; &lt;div className="space-y-2"&gt; {/* 최소값 슬라이더 */} &lt;input type="range" min={minTrend} max={maxTrend} step={(maxTrend - minTrend) / 1000} value={filters.trendRange[0]} onChange={(e) =&gt; handleTrendRangeChange(0, parseFloat(e.target.value))} /&gt; {/* 최대값 슬라이더 */} &lt;input type="range" min={minTrend} max={maxTrend} step={(maxTrend - minTrend) / 1000} value={filters.trendRange[1]} onChange={(e) =&gt; handleTrendRangeChange(1, parseFloat(e.target.value))} /&gt; &lt;/div&gt; &lt;/div&gt; {/* 가격 범위 (동일 패턴) */} {/* 정렬 옵션 */} &lt;div&gt; &lt;label&gt;정렬 기준&lt;/label&gt; &lt;div className="flex gap-2"&gt; &lt;button onClick={() =&gt; onFiltersChange({ ...filters, sortBy: 'trend' })} className={filters.sortBy === 'trend' ? 'active' : ''} &gt; 트렌드 {filters.sortBy === 'trend' &amp;&amp; (filters.sortOrder === 'asc' ? '↑' : '↓')} &lt;/button&gt; &lt;button onClick={() =&gt; onFiltersChange({ ...filters, sortBy: 'price' })} className={filters.sortBy === 'price' ? 'active' : ''} &gt; 가격 {filters.sortBy === 'price' &amp;&amp; (filters.sortOrder === 'asc' ? '↑' : '↓')} &lt;/button&gt; &lt;button onClick={() =&gt; onFiltersChange({ ...filters, sortBy: 'name' })} className={filters.sortBy === 'name' ? 'active' : ''} &gt; 이름 {filters.sortBy === 'name' &amp;&amp; (filters.sortOrder === 'asc' ? '↑' : '↓')} &lt;/button&gt; {/* 정렬 순서 토글 버튼 */} &lt;button onClick={() =&gt; onFiltersChange({ ...filters, sortOrder: filters.sortOrder === 'asc' ? 'desc' : 'asc' })} &gt; {filters.sortOrder === 'asc' ? '↑' : '↓'} &lt;/button&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; );
+}
+UI 특징
+듀얼 슬라이더: 최소/최대값을 두 개의 슬라이더로 조절
+실시간 값 표시: 라벨에 현재 선택된 범위 표시
+조건부 스타일: 선택된 정렬 기준은 active 클래스
+정렬 순서 표시: ↑(오름차순), ↓(내림차순) 아이콘
+src/components/PresetModal.tsxexport function PresetModal({ isOpen, onClose, presets, onLoad, onSave, onDelete,
+}: PresetModalProps) { const [presetName, setPresetName] = useState(''); const [isSaveMode, setIsSaveMode] = useState(false); const handleSave = () =&gt; { if (presetName.trim()) { onSave(presetName); setPresetName(''); setIsSaveMode(false); } }; if (!isOpen) return null; return ( &lt;div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"&gt; &lt;div className="bg-white rounded-lg p-6 max-w-md w-full mx-4"&gt; &lt;h3 className="text-xl font-bold mb-4"&gt;필터 프리셋 관리&lt;/h3&gt; {/* 저장 모드 */} {isSaveMode ? ( &lt;div className="mb-4"&gt; &lt;input type="text" value={presetName} onChange={(e) =&gt; setPresetName(e.target.value)} placeholder="프리셋 이름" className="w-full px-4 py-2 border rounded mb-2" /&gt; &lt;div className="flex gap-2"&gt; &lt;button onClick={handleSave}&gt;저장&lt;/button&gt; &lt;button onClick={() =&gt; setIsSaveMode(false)}&gt;취소&lt;/button&gt; &lt;/div&gt; &lt;/div&gt; ) : ( &lt;button onClick={() =&gt; setIsSaveMode(true)}&gt;새 프리셋 저장&lt;/button&gt; )} {/* 프리셋 목록 */} &lt;div className="space-y-2 mt-4"&gt; {presets.map((preset) =&gt; ( &lt;div key={preset.id} className="flex items-center justify-between p-3 bg-gray-50 rounded"&gt; &lt;div&gt; &lt;div className="font-medium"&gt;{preset.name}&lt;/div&gt; &lt;div className="text-sm text-gray-500"&gt; {new Date(preset.createdAt).toLocaleDateString('ko-KR')} &lt;/div&gt; &lt;/div&gt; &lt;div className="flex gap-2"&gt; &lt;button onClick={() =&gt; { onLoad(preset.id); onClose(); }} &gt; 불러오기 &lt;/button&gt; &lt;button onClick={() =&gt; onDelete(preset.id)}&gt;삭제&lt;/button&gt; &lt;/div&gt; &lt;/div&gt; ))} {presets.length === 0 &amp;&amp; ( &lt;p className="text-gray-500 text-center py-4"&gt; 저장된 프리셋이 없습니다. &lt;/p&gt; )} &lt;/div&gt; &lt;button onClick={onClose} className="mt-4 w-full"&gt;닫기&lt;/button&gt; &lt;/div&gt; &lt;/div&gt; );
+}
+모달 구조
+저장 모드와 목록 모드 토글
+각 프리셋마다 불러오기/삭제 버튼
+프리셋 이름과 생성 날짜 표시
+src/components/Dashboard.tsxexport function Dashboard() { const { data } = useMarketData(); const { filters, setFilters, filteredData, resetFilters, dataRange } = useFilter(data); const { presets, savePreset, deletePreset, loadPreset } = useFilterPresets(); const [isPresetModalOpen, setIsPresetModalOpen] = useState(false); const handleSavePreset = (name: string) =&gt; { savePreset(name, filters); }; const handleLoadPreset = (id: string) =&gt; { const presetFilters = loadPreset(id); if (presetFilters) { setFilters(presetFilters); } }; return ( &lt;div&gt; {/* 필터 패널 */} &lt;FilterPanel filters={filters} onFiltersChange={setFilters} onReset={resetFilters} minTrend={dataRange.minTrend} maxTrend={dataRange.maxTrend} minPrice={dataRange.minPrice} maxPrice={dataRange.maxPrice} onSavePreset={() =&gt; setIsPresetModalOpen(true)} onLoadPreset={() =&gt; setIsPresetModalOpen(true)} /&gt; {/* 프리셋 모달 */} &lt;PresetModal isOpen={isPresetModalOpen} onClose={() =&gt; setIsPresetModalOpen(false)} presets={presets} onSave={handleSavePreset} onLoad={handleLoadPreset} onDelete={deletePreset} /&gt; {/* 필터링된 데이터를 차트에 전달 */} &lt;TrendBarChart data={filteredData} /&gt; &lt;TrendScatterPlot data={filteredData} /&gt; &lt;PriceLineChart data={filteredData} /&gt; &lt;/div&gt; );
+}
+통합 패턴
+모든 필터 로직은 useFilter 훅에 집중
+프리셋 관리는 useFilterPresets 훅이 담당
+Dashboard는 단순히 컴포넌트 조합 역할
+https://example.com/?trendMin=0.1&amp;trendMax=0.5&amp;priceMin=10000&amp;priceMax=1000000&amp;search=BTC&amp;sortBy=price&amp;sortOrder=desc
+URL 공유 시나리오
+사용자가 필터 설정
+URL이 자동으로 업데이트
+URL 복사 후 다른 사람에게 전달
+받은 사람이 URL 접속 시 동일한 필터 상태로 표시
+[ { "id": "1697523456789", "name": "비트코인만 보기", "filters": { "trendRange": [0, 1], "priceRange": [50000000, 100000000], "searchText": "BTC", "sortBy": "trend", "sortOrder": "desc" }, "createdAt": "2025-10-17T07:30:56.789Z" }, { "id": "1697523567890", "name": "고가 코인 상승세", "filters": { "trendRange": [0.3, 1], "priceRange": [1000000, 100000000], "searchText": "", "sortBy": "price", "sortOrder": "desc" }, "createdAt": "2025-10-17T07:32:47.890Z" }
+]
+// ❌ 나쁜 예: URL 업데이트 누락
+const [filters, setFilters] = useState(initialFilters);
+// 필터 변경 시 URL 미반영 → 새로고침 시 상태 손실 // ✅ 좋은 예: 양방향 동기화
+useEffect(() =&gt; { // URL → State const params = new URLSearchParams(window.location.search); setFilters(parseUrlParams(params));
+}, []); useEffect(() =&gt; { // State → URL const params = buildUrlParams(filters); window.history.replaceState({}, '', `?${params}`);
+}, [filters]);
+// 두 개의 range input으로 범위 선택
+&lt;input type="range" min={min} max={max} value={range[0]} // 최소값 onChange={(e) =&gt; setRange([parseFloat(e.target.value), range[1]])}
+/&gt;
+&lt;input type="range" min={min} max={max} value={range[1]} // 최대값 onChange={(e) =&gt; setRange([range[0], parseFloat(e.target.value)])}
+/&gt;
+주의사항: 최소값이 최대값보다 커지지 않도록 검증 필요// 저장
+localStorage.setItem('key', JSON.stringify(data)); // 불러오기
+const stored = localStorage.getItem('key');
+const data = stored ? JSON.parse(stored) : defaultValue;
+보안 고려사항
+민감한 정보는 LocalStorage에 저장 금지
+JSON.parse 시 try-catch로 에러 처리
+// ❌ 비효율: 매번 모든 필터 적용
+const filtered = data .filter(applyTrendFilter) .filter(applyPriceFilter) .filter(applySearchFilter); // ✅ 효율적: 한 번에 모든 조건 검증
+const filtered = data.filter((item) =&gt; { if (!passesTrendFilter(item)) return false; if (!passesPriceFilter(item)) return false; if (!passesSearchFilter(item)) return false; return true;
+});
+원인: 숫자를 문자열로 읽어서 비교 실패해결: parseFloat로 숫자 변환const trendMin = params.get('trendMin');
+const value = trendMin ? parseFloat(trendMin) : defaultMin;
+원인: 최소값 슬라이더를 최대값보다 크게 설정 가능해결: 슬라이더 값 검증const handleTrendRangeChange = (index: 0 | 1, value: number) =&gt; { const newRange: [number, number] = [...filters.trendRange]; newRange[index] = value; // 최소값이 최대값보다 크면 조정 if (newRange[0] &gt; newRange[1]) { newRange[1] = newRange[0]; } onFiltersChange({ ...filters, trendRange: newRange });
+};
+원인: LocalStorage는 업데이트했지만 상태 미변경해결: 상태와 LocalStorage 동시 업데이트const deletePreset = (id: string) =&gt; { const updatedPresets = presets.filter((p) =&gt; p.id !== id); setPresets(updatedPresets); // 상태 업데이트 localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedPresets)); // 저장
+};
+원인: 모든 필터 값을 URL에 포함해결: 기본값과 다를 때만 URL에 추가// 기본값과 다를 때만 파라미터 추가
+if (filters.trendRange[0] !== dataRange.minTrend) { params.set('trendMin', filters.trendRange[0].toString());
+}
+다음 글에서는 Issue #8: 반응형 디자인 및 다크 모드 구현을 진행합니다.
+모바일/태블릿/데스크톱 반응형 레이아웃
+다크 모드 지원
+터치 친화적 UI
+접근성 개선 <a data-tooltip-position="top" aria-label="https://github.com/pyhu26/coin-dashboard" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/pyhu26/coin-dashboard" target="_self">GitHub Repo</a>
+<br><a data-tooltip-position="top" aria-label="https://sparkly-pony-ae3435.netlify.app/" rel="noopener nofollow" class="external-link is-unresolved" href="https://sparkly-pony-ae3435.netlify.app/" target="_self">완성 웹사이트</a>
+관련 커밋: ef5dc48
+이 시리즈는 Claude Code와 함께하는 실제 개발 과정을 기록한 바이브 코딩기입니다.]]></description><link>01.project/coin-대시보드/07-고급-필터링-기능-구현.html</link><guid isPermaLink="false">01.project/Coin 대시보드/07-고급-필터링-기능-구현.md</guid><pubDate>Sun, 19 Oct 2025 02:55:30 GMT</pubDate></item><item><title><![CDATA[06-시간별-가격-추이-Line-Chart]]></title><description><![CDATA[
+"시간에 따른 가격 변화를 Line Chart로 보여줘. 여러 마켓을 선택해서 비교할 수 있게 하고, 각 마켓별로 추세선도 그려줘." ✅ 시계열 데이터 구조 설계
+✅ Line Chart 컴포넌트 생성
+✅ 마켓 선택 기능 (차트 간 동기화)
+✅ 각 마켓별 추세선 계산 및 표시
+✅ 시간 표시 개선 (가독성)
+src/types/index.tsexport interface MarketData { market_name: string; trend_weight: number; last_high_price: number; high_prices: number[] | null; // 가격 배열 timestamp_array: number[] | null; // 시간 배열 (인덱스) analysis_time: string | null; created_at: string;
+} // 추세선 데이터
+export interface TrendLine { marketName: string; slope: number; intercept: number; points: { time: number; price: number }[];
+}
+데이터 구조
+high_prices: [100, 105, 110, 108, ...] (가격 배열)
+timestamp_array: [0, 1, 2, 3, ...] (시간 인덱스)
+src/components/PriceLineChart.tsximport { useMemo } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+} from 'recharts';
+import { calculateLinearRegression, getTrendLinePoints } from '../utils/linearRegression';
+import type { MarketData } from '../types'; interface Props { data: MarketData[]; selectedMarket: string;
+} export function PriceLineChart({ data, selectedMarket }: Props) { const chartData = useMemo(() =&gt; { if (!selectedMarket) return null; const market = data.find((d) =&gt; d.market_name === selectedMarket); if (!market || !market.high_prices || !market.timestamp_array) { return null; } // 시계열 데이터 변환 const priceData = market.high_prices.map((price, index) =&gt; ({ time: market.timestamp_array![index], price: price, formattedTime: `T-${market.high_prices!.length - index}`, // T-10, T-9, ... })); // 추세선 계산 const regressionData = priceData.map((d) =&gt; ({ x: d.time, y: d.price })); const { slope, intercept } = calculateLinearRegression(regressionData); const trendLine = getTrendLinePoints(regressionData, slope, intercept); // 추세선 데이터 병합 return priceData.map((d, index) =&gt; ({ ...d, trendLine: trendLine[index].y, })); }, [data, selectedMarket]); if (!chartData) { return ( &lt;div className="flex items-center justify-center h-64 text-gray-500"&gt; {selectedMarket ? '해당 마켓의 시계열 데이터가 없습니다.' : '마켓을 선택하세요.'} &lt;/div&gt; ); } return ( &lt;ResponsiveContainer width="100%" height={400}&gt; &lt;LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }} &gt; &lt;CartesianGrid strokeDasharray="3 3" /&gt; &lt;XAxis dataKey="formattedTime" label={{ value: '시간', position: 'insideBottom', offset: -10 }} /&gt; &lt;YAxis label={{ value: '가격 (원)', angle: -90, position: 'insideLeft' }} /&gt; &lt;Tooltip formatter={(value: number) =&gt; [value.toLocaleString() + '원', '가격']} /&gt; &lt;Legend /&gt; {/* 실제 가격 라인 */} &lt;Line type="monotone" dataKey="price" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} name={selectedMarket} /&gt; {/* 추세선 */} &lt;Line type="monotone" dataKey="trendLine" stroke="#ef4444" strokeWidth={2} strokeDasharray="5 5" dot={false} name="추세선" /&gt; &lt;/LineChart&gt; &lt;/ResponsiveContainer&gt; );
+}
+핵심 구현
+시간 포맷팅: T-10, T-9, ... (현재부터 10 시점 전, 9 시점 전)
+빈 상태 처리: 선택된 마켓이 없거나 데이터가 없을 때 안내 메시지
+추세선 병합: 실제 가격과 추세선을 같은 차트에 표시
+src/components/Dashboard.tsxexport function Dashboard() { const { data } = useMarketData(); const [selectedMarket, setSelectedMarket] = useState&lt;string&gt;(''); const handleMarketClick = (marketName: string) =&gt; { // 토글 방식: 같은 마켓 클릭 시 선택 해제 setSelectedMarket((prev) =&gt; (prev === marketName ? '' : marketName)); }; return ( &lt;div&gt; {/* Bar Chart */} &lt;TrendBarChart data={data} selectedMarkets={selectedMarket ? [selectedMarket] : []} onMarketClick={handleMarketClick} /&gt; {/* Scatter Plot */} &lt;TrendScatterPlot data={data} selectedMarkets={selectedMarket ? [selectedMarket] : []} onMarketClick={handleMarketClick} /&gt; {/* Line Chart */} &lt;PriceLineChart data={data} selectedMarket={selectedMarket} /&gt; &lt;/div&gt; );
+}
+동기화 메커니즘
+모든 차트가 같은 selectedMarket 상태 공유
+Bar Chart나 Scatter Plot에서 마켓 클릭 → Line Chart 자동 업데이트
+상태 끌어올리기(Lifting State Up) 패턴
+📈 최고가 트렌드 (KRW-BTC 선택됨) 가격(원) │ 70M│ ╱╲ 실제 가격 ━━━ │ ╱ ╲ 추세선 ─ ─ ─ 60M│ ╱ ╲ ╱╲ │ ╱ ╲ ╱ ╲ ╱─ ─ ─ ─ 50M│ ╱ ╲ ╱ ╲ ╱ │ ╱ ╲╱ ╲ ╱ 40M│ ╱ ╲ ╱ │ ╱ ╲╱ 30M│ ╱ └──────────────────────────────── T-10 T-9 T-8 T-7 T-6 T-5 T-4 T-3 시간
+추세선 기울기slope &gt; 0 // 상승 추세 📈
+slope &lt; 0 // 하락 추세 📉
+slope ≈ 0 // 횡보 추세 →
+예시// KRW-BTC
+slope: 5000000 // 시간당 500만원 상승
+intercept: 50000000
+// → 강한 상승 추세
+// ❌ 나쁜 예: 데이터 중복
+const chartData = data.map(d =&gt; ({ time: d.time, price: d.price, trendLine: calculateTrend(d), // 매번 계산
+})); // ✅ 좋은 예: 한 번 계산 후 매핑
+const { slope, intercept } = calculateLinearRegression(data);
+const trendLine = getTrendLinePoints(data, slope, intercept);
+const chartData = data.map((d, i) =&gt; ({ ...d, trendLine: trendLine[i].y, // 미리 계산된 값 사용
+}));
+// Early return으로 깔끔하게
+if (!chartData) { return &lt;EmptyState /&gt;;
+} return &lt;Chart data={chartData} /&gt;;
+// ❌ 가독성 낮음
+0, 1, 2, 3, 4, ... // ✅ 가독성 높음
+T-10, T-9, T-8, T-7, ... 한 차트에서 선택 → 다른 차트에 반영
+일관된 사용자 경험
+상태 관리의 중요성
+원인: 이상치(outlier)의 영향해결: 이상치 제거 또는 가중 회귀// 간단한 이상치 제거
+const cleanedData = data.filter(d =&gt; { const mean = avg(data); const std = standardDeviation(data); return Math.abs(d.price - mean) &lt; 2 * std;
+});
+원인: 데이터 포인트가 너무 많음해결: 간격 조절&lt;XAxis dataKey="formattedTime" interval={Math.floor(chartData.length / 10)} // 10개만 표시
+/&gt;
+원인: 토글 로직 누락해결: 같은 마켓 클릭 시 빈 문자열로 설정setSelectedMarket((prev) =&gt; (prev === marketName ? '' : marketName));
+다음 글에서는 Issue #7: 고급 필터링 기능 구현을 진행합니다.
+트렌드 가중치 범위 필터 (슬라이더)
+가격 범위 필터
+마켓명 검색
+필터 프리셋 저장 <a data-tooltip-position="top" aria-label="https://github.com/pyhu26/coin-dashboard" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/pyhu26/coin-dashboard" target="_self">GitHub Repo</a>
+<br><a data-tooltip-position="top" aria-label="https://sparkly-pony-ae3435.netlify.app/" rel="noopener nofollow" class="external-link is-unresolved" href="https://sparkly-pony-ae3435.netlify.app/" target="_self">완성 웹사이트</a>
+관련 커밋: 3a4a142, 910841f
+이 시리즈는 Claude Code와 함께하는 실제 개발 과정을 기록한 바이브 코딩기입니다.]]></description><link>01.project/coin-대시보드/06-시간별-가격-추이-line-chart.html</link><guid isPermaLink="false">01.project/Coin 대시보드/06-시간별-가격-추이-Line-Chart.md</guid><pubDate>Sun, 19 Oct 2025 02:37:24 GMT</pubDate></item><item><title><![CDATA[05-실시간-데이터-업데이트-구현]]></title><description><![CDATA[
+"데이터가 변경되면 자동으로 차트가 업데이트되게 해줘. Supabase Realtime을 사용해서 실시간으로 연동되면 좋겠어." ✅ Supabase Realtime 구독 설정
+✅ 데이터 변경 감지 및 자동 업데이트
+✅ React Query 캐시 무효화
+✅ 연결 상태 표시 UI
+✅ 재연결 로직 구현
+src/hooks/useRealtimeMarketData.tsimport { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { supabase } from '../lib/supabase'; export function useRealtimeMarketData() { const queryClient = useQueryClient(); const [isConnected, setIsConnected] = useState(false); const [lastUpdate, setLastUpdate] = useState&lt;Date | null&gt;(null); const [error, setError] = useState&lt;string | null&gt;(null); useEffect(() =&gt; { // Realtime 채널 생성 const channel = supabase .channel('market-trends-changes') .on( 'postgres_changes', { event: '*', // INSERT, UPDATE, DELETE 모두 감지 schema: 'public', table: 'market_trends', }, (payload) =&gt; { console.log('데이터 변경 감지:', payload); // React Query 캐시 무효화 → 자동 재조회 queryClient.invalidateQueries({ queryKey: ['marketData'] }); setLastUpdate(new Date()); setError(null); } ) .subscribe((status) =&gt; { console.log('구독 상태:', status); if (status === 'SUBSCRIBED') { setIsConnected(true); setError(null); } else if (status === 'CLOSED') { setIsConnected(false); setError('연결이 종료되었습니다.'); } else if (status === 'CHANNEL_ERROR') { setIsConnected(false); setError('채널 오류가 발생했습니다.'); } }); // 클린업: 컴포넌트 언마운트 시 구독 해제 return () =&gt; { supabase.removeChannel(channel); }; }, [queryClient]); return { isConnected, lastUpdate, error };
+}
+핵심 개념
+Channel: Supabase Realtime의 구독 단위
+postgres_changes: PostgreSQL 변경 이벤트 수신
+invalidateQueries: React Query 캐시 무효화 → 자동 재조회
+subscribe callback: 연결 상태 추적
+src/components/Dashboard.tsximport { useRealtimeMarketData } from '../hooks/useRealtimeMarketData'; export function Dashboard() { const { data, isLoading, error } = useMarketData(); const { isConnected, lastUpdate, error: realtimeError } = useRealtimeMarketData(); return ( &lt;div&gt; {/* 실시간 연결 상태 표시 */} &lt;div className={`flex items-center gap-2 px-4 py-2 rounded-full ${ isConnected ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }`}&gt; &lt;span className={`w-2 h-2 rounded-full ${ isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500' }`} /&gt; {isConnected ? '실시간 연결됨' : realtimeError || '연결 끊김'} &lt;/div&gt; {lastUpdate &amp;&amp; ( &lt;div className="text-sm text-gray-500"&gt; 마지막 업데이트: {lastUpdate.toLocaleTimeString('ko-KR')} &lt;/div&gt; )} {/* 차트들 */} &lt;/div&gt; );
+}
+UI 특징
+녹색 점 + 애니메이션: 연결됨
+빨간색 점: 연결 끊김
+마지막 업데이트 시간: 실시간성 확인
+// 방법 1: 특정 쿼리만 무효화
+queryClient.invalidateQueries({ queryKey: ['marketData'] }); // 방법 2: 모든 쿼리 무효화
+queryClient.invalidateQueries(); // 방법 3: 직접 데이터 설정 (최적화)
+queryClient.setQueryData(['marketData'], newData);
+선택한 방법: invalidateQueries
+장점: React Query가 자동으로 재조회 (기존 로직 재사용)
+단점: 네트워크 요청 발생
+대안: setQueryData
+장점: 네트워크 요청 없음 (payload에서 직접 업데이트)
+단점: 부분 업데이트만 가능 (전체 목록 재조회 필요 시 부적합)
+1. Supabase에서 데이터 변경 (INSERT/UPDATE/DELETE) ↓
+2. Realtime 채널이 변경 이벤트 수신 ↓
+3. postgres_changes 콜백 실행 ↓
+4. React Query 캐시 무효화 ↓
+5. useMarketData 훅이 자동 재조회 ↓
+6. 차트 컴포넌트 자동 리렌더링
+[Supabase DB] │ (변경 발생) ▼
+[Realtime Server] │ (WebSocket) ▼
+[브라우저] ├─ useRealtimeMarketData (이벤트 수신) └─ React Query (데이터 재조회) HTTP 폴링: 주기적으로 요청 → 비효율적, 실시간성 낮음
+WebSocket: 양방향 연결 유지 → 효율적, 즉시 업데이트
+// ❌ Realtime으로 받은 데이터를 직접 상태 관리
+const [data, setData] = useState([]);
+// → 복잡한 상태 동기화 필요 // ✅ React Query 캐시 무효화만 실행
+queryClient.invalidateQueries(['marketData']);
+// → React Query가 알아서 재조회 사용자가 네트워크 문제를 인지할 수 있도록
+디버깅 시 연결 상태 확인 가능
+재연결 로직 트리거
+useEffect(() =&gt; { const channel = supabase.channel(...); return () =&gt; { // 컴포넌트 언마운트 시 구독 해제 supabase.removeChannel(channel); };
+}, []);
+왜 필요한가?
+메모리 누수 방지
+불필요한 WebSocket 연결 유지 방지
+원인: Supabase 프로젝트에서 Realtime 활성화 안 됨해결: Supabase Dashboard
+Database → Replication
+market_trends 테이블 Realtime 활성화
+Supabase 프로젝트 재시작
+원인: 모든 행 변경마다 전체 데이터 재조회해결: 필터 추가.on('postgres_changes', { event: 'INSERT', // INSERT만 감지 schema: 'public', table: 'market_trends', filter: 'created_at=gte.2024-01-01' // 최근 데이터만
+}, ...)
+원인: 네트워크 불안정 or 서버 타임아웃해결: 재연결 로직useEffect(() =&gt; { const reconnect = () =&gt; { console.log('재연결 시도...'); // 채널 재생성 }; if (!isConnected &amp;&amp; error) { const timer = setTimeout(reconnect, 5000); return () =&gt; clearTimeout(timer); }
+}, [isConnected, error]);
+다음 글에서는 Issue #6: 시간별 가격 추이 Line Chart + 추세선 구현을 진행합니다.
+시계열 데이터 처리
+다중 라인 차트
+마켓별 추세선 <a data-tooltip-position="top" aria-label="https://github.com/pyhu26/coin-dashboard" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/pyhu26/coin-dashboard" target="_self">GitHub Repo</a>
+<br><a data-tooltip-position="top" aria-label="https://sparkly-pony-ae3435.netlify.app/" rel="noopener nofollow" class="external-link is-unresolved" href="https://sparkly-pony-ae3435.netlify.app/" target="_self">완성 웹사이트</a>
+관련 커밋: 9da5236
+이 시리즈는 Claude Code와 함께하는 실제 개발 과정을 기록한 바이브 코딩기입니다.]]></description><link>01.project/coin-대시보드/05-실시간-데이터-업데이트-구현.html</link><guid isPermaLink="false">01.project/Coin 대시보드/05-실시간-데이터-업데이트-구현.md</guid><pubDate>Sun, 19 Oct 2025 02:37:24 GMT</pubDate></item><item><title><![CDATA[04-Scatter-Plot-상관관계-분석]]></title><description><![CDATA[
+"트렌드 가중치와 가격의 상관관계를 Scatter Plot으로 보여줘. 추세선도 그리고, 각 점을 클릭하면 마켓 정보를 볼 수 있게 해줘." ✅ Recharts Scatter Chart 생성
+✅ 트렌드 가중치 vs 가격 데이터 매핑
+✅ 선형 회귀 추세선 추가
+✅ 클릭 인터랙션으로 마켓 선택
+✅ 툴팁에 상세 정보 표시
+src/components/TrendScatterPlot.tsximport { useMemo } from 'react';
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line,
+} from 'recharts';
+import { calculateLinearRegression, getTrendLinePoints } from '../utils/linearRegression';
+import type { MarketData } from '../types'; interface Props { data: MarketData[]; selectedMarkets?: string[]; onMarketClick?: (marketName: string) =&gt; void;
+} export function TrendScatterPlot({ data, selectedMarkets = [], onMarketClick }: Props) { const { scatterData, trendLineData } = useMemo(() =&gt; { // Scatter 데이터 변환 const scatterData = data.map((item) =&gt; ({ x: item.trend_weight, y: item.last_high_price, market_name: item.market_name, isSelected: selectedMarkets.includes(item.market_name), })); // 선형 회귀 계산 const regressionData = data.map((item) =&gt; ({ x: item.trend_weight, y: item.last_high_price, })); const { slope, intercept } = calculateLinearRegression(regressionData); const trendLineData = getTrendLinePoints(regressionData, slope, intercept); return { scatterData, trendLineData }; }, [data, selectedMarkets]); const handleClick = (data: any) =&gt; { if (onMarketClick &amp;&amp; data &amp;&amp; data.market_name) { onMarketClick(data.market_name); } }; return ( &lt;ResponsiveContainer width="100%" height={500}&gt; &lt;ScatterChart margin={{ top: 20, right: 30, left: 20, bottom: 20 }} &gt; &lt;CartesianGrid strokeDasharray="3 3" /&gt; &lt;XAxis type="number" dataKey="x" name="트렌드 가중치" label={{ value: '트렌드 가중치', position: 'insideBottom', offset: -10 }} /&gt; &lt;YAxis type="number" dataKey="y" name="최고가" label={{ value: '최고가 (원)', angle: -90, position: 'insideLeft' }} /&gt; &lt;Tooltip cursor={{ strokeDasharray: '3 3' }} content={({ payload }) =&gt; { if (!payload || payload.length === 0) return null; const data = payload[0].payload; return ( &lt;div className="bg-white p-3 border border-gray-300 rounded shadow-lg"&gt; &lt;p className="font-bold text-gray-900"&gt;{data.market_name}&lt;/p&gt; &lt;p className="text-sm text-gray-600"&gt; 트렌드: {data.x.toFixed(6)} &lt;/p&gt; &lt;p className="text-sm text-gray-600"&gt; 가격: {data.y.toLocaleString()}원 &lt;/p&gt; &lt;/div&gt; ); }} /&gt; &lt;Legend /&gt; {/* 추세선 */} &lt;Line type="monotone" data={trendLineData} dataKey="y" stroke="#ef4444" strokeWidth={2} strokeDasharray="5 5" dot={false} name="추세선" /&gt; {/* Scatter 점들 */} &lt;Scatter name="마켓" data={scatterData} fill="#3b82f6" onClick={handleClick} shape={(props: any) =&gt; { const { cx, cy, payload } = props; const isSelected = payload.isSelected; return ( &lt;circle cx={cx} cy={cy} r={isSelected ? 8 : 5} fill={isSelected ? '#ef4444' : '#3b82f6'} stroke={isSelected ? '#dc2626' : '#2563eb'} strokeWidth={2} style={{ cursor: 'pointer' }} /&gt; ); }} /&gt; &lt;/ScatterChart&gt; &lt;/ResponsiveContainer&gt; );
+}
+핵심 포인트
+Custom Shape: 선택된 마켓은 크기/색상 변경
+onClick 핸들러: 클릭 시 부모 컴포넌트에 알림
+Custom Tooltip: 마켓명과 정확한 값 표시
+Dashboard에서 상태 관리:// Dashboard.tsx
+export function Dashboard() { const { data } = useMarketData(); const [selectedMarket, setSelectedMarket] = useState&lt;string&gt;(''); const handleMarketClick = (marketName: string) =&gt; { setSelectedMarket((prev) =&gt; (prev === marketName ? '' : marketName)); }; return ( &lt;TrendScatterPlot data={data} selectedMarkets={selectedMarket ? [selectedMarket] : []} onMarketClick={handleMarketClick} /&gt; );
+}
+상태 관리 로직
+같은 마켓 클릭 → 선택 해제 (토글 방식)
+다른 마켓 클릭 → 새로운 마켓 선택
+&lt;Tooltip content={({ payload }) =&gt; { if (!payload || payload.length === 0) return null; const data = payload[0].payload; return ( &lt;div className="bg-white p-3 border border-gray-300 rounded shadow-lg"&gt; &lt;p className="font-bold text-gray-900"&gt; {data.market_name} &lt;/p&gt; &lt;p className="text-sm text-gray-600"&gt; 트렌드: {data.x.toFixed(6)} &lt;/p&gt; &lt;p className="text-sm text-gray-600"&gt; 가격: {data.y.toLocaleString()}원 &lt;/p&gt; &lt;/div&gt; ); }}
+/&gt;
+스타일 특징
+shadow-lg: 깊은 그림자로 부각
+toLocaleString(): 가격 천 단위 구분
+toFixed(6): 트렌드 가중치 소수점 6자리
+📊 트렌드-가격 상관관계 가격(원) │ 1M │ ● KRW-BTC │
+500K│ ● │ ● ● ● 추세선
+100K│ ● ● ● ● ● ╱ │ ● ● ● ● ● ● ╱ 10K│ ●●●●●●●●●●●●●●●●●● ╱ │●●●●●●●●●●●●●●●●●●●● ╱ 1K│●●●●●●●●●●●●●●●●●●●● ╱ └────────────────────────────── 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 트렌드 가중치 클릭한 마켓 (빨간색 ●)
+추세선 해석
+기울기가 양수: 트렌드 ↑ → 가격 ↑ (양의 상관관계)
+기울기가 음수: 트렌드 ↑ → 가격 ↓ (음의 상관관계)
+기울기가 0에 가까움: 상관관계 없음
+실제 데이터 분석// 예시 결과
+slope: 15000000 // 양의 상관관계
+// 해석: 트렌드 가중치가 0.1 증가하면 가격이 약 150만원 증가
+// Bar/Line Chart와 달리 XAxis, YAxis 모두 숫자 타입
+&lt;XAxis type="number" dataKey="x" /&gt;
+&lt;YAxis type="number" dataKey="y" /&gt; // Line Chart에서는
+&lt;XAxis dataKey="time" /&gt; // 카테고리
+&lt;YAxis /&gt; // 숫자
+shape={(props) =&gt; { const { cx, cy, payload } = props; // cx, cy: 중심 좌표 // payload: 데이터 return ( &lt;circle cx={cx} cy={cy} r={payload.isSelected ? 8 : 5} // 조건부 크기 fill={payload.isSelected ? 'red' : 'blue'} /&gt; );
+}}
+// Recharts는 클릭된 데이터를 자동으로 전달
+&lt;Scatter onClick={(data) =&gt; console.log(data)} /&gt; // data 구조:
+{ x: 0.5, y: 1000000, market_name: "KRW-BTC", payload: { ... } // 전체 데이터
+} 숫자만 보면 알 수 없던 패턴 발견
+이상치(outlier) 쉽게 파악
+클러스터링 확인
+원인: 가격 범위가 1,000원 ~ 100,000,000원으로 매우 큼시도한 해결책:// 로그 스케일 적용
+&lt;YAxis scale="log" domain={['auto', 'auto']} /&gt;
+결과: 데이터 분포가 고르게 표시됨원인: SVG 요소의 z-index 문제해결: Scatter를 Line 뒤에 선언&lt;Line ... /&gt; {/* 추세선 먼저 */}
+&lt;Scatter ... /&gt; {/* Scatter 나중에 (위에 그려짐) */}
+원인: Recharts 기본 Tooltip 위치 계산해결: wrapperStyle로 조정&lt;Tooltip wrapperStyle={{ zIndex: 1000 }} allowEscapeViewBox={{ x: true, y: true }}
+/&gt;
+다음 글에서는 Issue #5: 실시간 데이터 업데이트 구현을 진행합니다.
+Supabase Realtime 구독
+자동 데이터 갱신
+네트워크 오류 처리 <a data-tooltip-position="top" aria-label="https://github.com/pyhu26/coin-dashboard" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/pyhu26/coin-dashboard" target="_self">GitHub Repo</a>
+<br><a data-tooltip-position="top" aria-label="https://sparkly-pony-ae3435.netlify.app/" rel="noopener nofollow" class="external-link is-unresolved" href="https://sparkly-pony-ae3435.netlify.app/" target="_self">완성 웹사이트</a>
+관련 커밋: 226111d
+이 시리즈는 Claude Code와 함께하는 실제 개발 과정을 기록한 바이브 코딩기입니다.]]></description><link>01.project/coin-대시보드/04-scatter-plot-상관관계-분석.html</link><guid isPermaLink="false">01.project/Coin 대시보드/04-Scatter-Plot-상관관계-분석.md</guid><pubDate>Sun, 19 Oct 2025 02:35:49 GMT</pubDate></item><item><title><![CDATA[03-트렌드-가중치-Bar-Chart-구현]]></title><description><![CDATA[
+"트렌드 가중치를 Bar Chart로 보여주고, 추세선도 그려줘. 표시할 개수도 선택할 수 있게 해줘." ✅ Recharts Bar Chart 컴포넌트 생성
+✅ 선형 회귀 추세선 계산 로직
+✅ 표시 개수 조절 기능 (10, 20, 30, 50, 100개)
+✅ 툴팁 및 범례 추가
+✅ 반응형 차트 크기 조정
+추세선을 그리기 위해 먼저 선형 회귀 계산 로직을 구현했습니다.src/utils/linearRegression.tsexport function calculateLinearRegression(data: { x: number; y: number }[]) { const n = data.length; const sumX = data.reduce((sum, p) =&gt; sum + p.x, 0); const sumY = data.reduce((sum, p) =&gt; sum + p.y, 0); const sumXY = data.reduce((sum, p) =&gt; sum + p.x * p.y, 0); const sumXX = data.reduce((sum, p) =&gt; sum + p.x * p.x, 0); // y = mx + b 계산 const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX); const intercept = (sumY - slope * sumX) / n; return { slope, intercept };
+} export function getTrendLinePoints( data: { x: number; y: number }[], slope: number, intercept: number
+) { return data.map(({ x }) =&gt; ({ x, y: slope * x + intercept, }));
+}
+수학 공식기울기(slope) = (n·Σxy - Σx·Σy) / (n·Σx² - (Σx)²)
+절편(intercept) = (Σy - slope·Σx) / n
+추세선 y값 = slope·x + intercept
+src/components/TrendBarChart.tsximport { useState, useMemo } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line,
+} from 'recharts';
+import { calculateLinearRegression, getTrendLinePoints } from '../utils/linearRegression';
+import type { MarketData } from '../types'; interface TrendBarChartProps { data: MarketData[];
+} export function TrendBarChart({ data }: TrendBarChartProps) { const [displayCount, setDisplayCount] = useState(20); const chartData = useMemo(() =&gt; { // 트렌드 가중치 기준 내림차순 정렬 후 상위 N개 선택 const sortedData = [...data] .sort((a, b) =&gt; b.trend_weight - a.trend_weight) .slice(0, displayCount); // 선형 회귀 계산 const regressionData = sortedData.map((item, index) =&gt; ({ x: index, y: item.trend_weight, })); const { slope, intercept } = calculateLinearRegression(regressionData); const trendLine = getTrendLinePoints(regressionData, slope, intercept); // 차트 데이터 변환 return sortedData.map((item, index) =&gt; ({ market_name: item.market_name, trend_weight: item.trend_weight, trendLine: trendLine[index].y, })); }, [data, displayCount]); const displayOptions = [10, 20, 30, 50, 100]; return ( &lt;div className="space-y-4"&gt; {/* 표시 개수 선택 */} &lt;div className="flex items-center justify-between"&gt; &lt;h3 className="text-lg font-semibold text-gray-700"&gt; 상위 {displayCount}개 마켓 &lt;/h3&gt; &lt;select value={displayCount} onChange={(e) =&gt; setDisplayCount(Number(e.target.value))} className="px-3 py-2 border border-gray-300 rounded-md" &gt; {displayOptions.map((option) =&gt; ( &lt;option key={option} value={option}&gt; {option}개 &lt;/option&gt; ))} &lt;/select&gt; &lt;/div&gt; {/* 차트 */} &lt;ResponsiveContainer width="100%" height={400}&gt; &lt;BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }} &gt; &lt;CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" /&gt; &lt;XAxis dataKey="market_name" angle={-45} textAnchor="end" height={100} tick={{ fontSize: 12 }} /&gt; &lt;YAxis label={{ value: '트렌드 가중치', angle: -90, position: 'insideLeft' }} /&gt; &lt;Tooltip contentStyle={{ backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '4px', }} formatter={(value: number) =&gt; [value.toFixed(6), '트렌드 가중치']} /&gt; &lt;Legend /&gt; &lt;Bar dataKey="trend_weight" fill="#3b82f6" radius={[4, 4, 0, 0]} /&gt; &lt;Line type="monotone" dataKey="trendLine" stroke="#ef4444" strokeWidth={2} strokeDasharray="5 5" dot={false} name="추세선" /&gt; &lt;/BarChart&gt; &lt;/ResponsiveContainer&gt; {/* 통계 정보 */} &lt;div className="text-sm text-gray-600 text-center"&gt; 표시된 마켓: {chartData.length}개 / 전체: {data.length}개 &lt;/div&gt; &lt;/div&gt; );
+}
+핵심 구현 포인트
+useMemo: displayCount나 data 변경 시에만 재계산
+정렬: sort((a, b) =&gt; b.trend_weight - a.trend_weight) - 내림차순
+추세선: Line 컴포넌트로 trendLine 데이터 오버레이
+반응형: ResponsiveContainer로 자동 크기 조정
+// X축 라벨 45도 회전
+&lt;XAxis dataKey="market_name" angle={-45} // 반시계 방향 45도 textAnchor="end" // 끝점 기준 정렬 height={100} // 충분한 높이 확보
+/&gt; // 바 차트 둥근 모서리
+&lt;Bar dataKey="trend_weight" fill="#3b82f6" // 파란색 radius={[4, 4, 0, 0]} // 상단만 둥글게
+/&gt; // 추세선 점선 스타일
+&lt;Line stroke="#ef4444" // 빨간색 strokeWidth={2} strokeDasharray="5 5" // 5px 선, 5px 공백 dot={false} // 데이터 포인트 숨김
+/&gt;
+📈 트렌드 가중치 차트 [표시 개수: 20 ▼] 트렌드 가중치 │
+0.4 │ ████████ KRW-MNT │ ███████ KRW-GAS 추세선 ╱╲
+0.3 │ ██████ KRW-ALGO ─ ─ ─╲ ─ │ █████ KRW-POWR ╲
+0.2 │ ████ KRW-ETH ─╲─ │ ███ KRW-BTC
+0.1 │ ██ KRW-XRP └──────────────────────────────────────────── 마켓명 (45도 회전) 표시된 마켓: 20개 / 전체: 214개 기울기가 음수: 트렌드 가중치가 순위에 따라 감소 (정상적)
+기울기의 크기: 상위 마켓과 하위 마켓의 격차
+회귀선: 전반적인 경향성 파악 선언적 API로 복잡한 차트를 간단히 구현
+ResponsiveContainer로 반응형 자동 처리
+여러 차트 타입을 한 공간에 오버레이 가능 (Bar + Line)
+// ❌ 매 렌더링마다 재계산 (비효율)
+const chartData = sortAndCalculate(data, displayCount); // ✅ 의존성 변경 시에만 재계산
+const chartData = useMemo(() =&gt; sortAndCalculate(data, displayCount), [data, displayCount]
+); 복잡한 데이터에서 단순한 경향성 추출
+이상치(outlier) 파악 가능
+미래 예측의 기초
+// 원본 데이터 → 정렬 → 필터링 → 계산 → 차트 데이터
+data .sort(...) // 1. 정렬 .slice(0, N) // 2. 상위 N개 .map(...) // 3. 형식 변환
+원인: 마켓명이 길어서 서로 겹침해결: 45도 회전 + 충분한 높이&lt;XAxis angle={-45} textAnchor="end" height={100} // 기본 30px → 100px
+/&gt;
+원인: SVG 렌더링 순서 (먼저 그린 것이 뒤에)해결: Bar보다 Line을 나중에 선언&lt;Bar ... /&gt; {/* 먼저 */}
+&lt;Line ... /&gt; {/* 나중에 (위에 그려짐) */}
+원인: 고정 너비 사용해결: ResponsiveContainer 사용&lt;ResponsiveContainer width="100%" height={400}&gt; &lt;BarChart&gt;...&lt;/BarChart&gt;
+&lt;/ResponsiveContainer&gt;
+다음 글에서는 Issue #4: 트렌드-가격 상관관계 Scatter Plot + 추세선 구현을 진행합니다.
+ScatterChart 생성
+로그 스케일 옵션
+클릭 인터랙션 <a data-tooltip-position="top" aria-label="https://github.com/pyhu26/coin-dashboard" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/pyhu26/coin-dashboard" target="_self">GitHub Repo</a>
+<br><a data-tooltip-position="top" aria-label="https://sparkly-pony-ae3435.netlify.app/" rel="noopener nofollow" class="external-link is-unresolved" href="https://sparkly-pony-ae3435.netlify.app/" target="_self">완성 웹사이트</a>
+관련 커밋: c7a3ee3
+이 시리즈는 Claude Code와 함께하는 실제 개발 과정을 기록한 바이브 코딩기입니다.]]></description><link>01.project/coin-대시보드/03-트렌드-가중치-bar-chart-구현.html</link><guid isPermaLink="false">01.project/Coin 대시보드/03-트렌드-가중치-Bar-Chart-구현.md</guid><pubDate>Sun, 19 Oct 2025 02:34:51 GMT</pubDate></item><item><title><![CDATA[02-기본-대시보드-레이아웃-구현]]></title><description><![CDATA[
+"대시보드 레이아웃을 만들어줘. 헤더에는 통계 정보를 보여주고, 로딩 상태와 에러 상태도 처리해줘. Tailwind CSS로 깔끔하게 만들어줘." ✅ Dashboard 컴포넌트 생성
+✅ 통계 카드 UI 구현
+✅ 반응형 그리드 레이아웃
+✅ 로딩/에러 상태 처리
+✅ Tailwind CSS 스타일링
+src/components/Dashboard.tsximport { useMarketData, useMarketStats } from '../hooks/useMarketData'; export function Dashboard() { const { data, isLoading, error } = useMarketData(); const stats = useMarketStats(data); if (isLoading) { return ( &lt;div className="flex items-center justify-center min-h-screen"&gt; &lt;div className="text-lg text-gray-600"&gt;데이터 로딩 중...&lt;/div&gt; &lt;/div&gt; ); } if (error) { return ( &lt;div className="flex items-center justify-center min-h-screen"&gt; &lt;div className="text-lg text-red-600"&gt; 오류가 발생했습니다: {error.message} &lt;/div&gt; &lt;/div&gt; ); } return ( &lt;div className="min-h-screen bg-gray-50"&gt; {/* 헤더 및 통계 */} {/* 차트 영역 */} &lt;/div&gt; );
+}
+구조 설계
+로딩 상태 → 중앙 정렬 로딩 메시지
+에러 상태 → 중앙 정렬 에러 메시지
+정상 상태 → 대시보드 전체 렌더링
+&lt;header className="mb-8"&gt; &lt;h1 className="text-4xl font-bold text-gray-900 mb-4"&gt; 📊 코인 트렌드 대시보드 &lt;/h1&gt; {stats &amp;&amp; ( &lt;div className="grid grid-cols-1 md:grid-cols-3 gap-4"&gt; &lt;div className="bg-white rounded-lg shadow p-6"&gt; &lt;div className="text-sm text-gray-500 mb-1"&gt;총 마켓 수&lt;/div&gt; &lt;div className="text-3xl font-bold text-gray-900"&gt; {stats.totalMarkets} &lt;/div&gt; &lt;/div&gt; &lt;div className="bg-white rounded-lg shadow p-6"&gt; &lt;div className="text-sm text-gray-500 mb-1"&gt;평균 트렌드&lt;/div&gt; &lt;div className="text-3xl font-bold text-blue-600"&gt; {stats.averageTrend.toFixed(3)} &lt;/div&gt; &lt;/div&gt; &lt;div className="bg-white rounded-lg shadow p-6"&gt; &lt;div className="text-sm text-gray-500 mb-1"&gt;상승세 마켓&lt;/div&gt; &lt;div className="text-3xl font-bold text-green-600"&gt; {stats.positiveTrendCount} &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; )}
+&lt;/header&gt;
+스타일 특징
+grid-cols-1 md:grid-cols-3: 모바일 1열, 데스크톱 3열
+shadow: 카드 그림자 효과
+rounded-lg: 둥근 모서리
+색상 구분: 기본(gray), 평균(blue), 상승(green)
+&lt;div className="space-y-8"&gt; {/* Bar Chart */} &lt;div className="bg-white rounded-lg shadow p-6"&gt; &lt;h2 className="text-xl font-bold text-gray-900 mb-4"&gt; 📈 트렌드 가중치 차트 &lt;/h2&gt; {/* 차트 컴포넌트가 들어갈 자리 */} &lt;/div&gt; {/* Scatter Plot */} &lt;div className="bg-white rounded-lg shadow p-6"&gt; &lt;h2 className="text-xl font-bold text-gray-900 mb-4"&gt; 📊 트렌드-가격 상관관계 &lt;/h2&gt; {/* 차트 컴포넌트가 들어갈 자리 */} &lt;/div&gt; {/* Line Chart */} &lt;div className="bg-white rounded-lg shadow p-6"&gt; &lt;h2 className="text-xl font-bold text-gray-900 mb-4"&gt; 📈 최고가 트렌드 &lt;/h2&gt; {/* 차트 컴포넌트가 들어갈 자리 */} &lt;/div&gt;
+&lt;/div&gt;
+레이아웃 전략
+space-y-8: 세로 간격 자동 조절
+각 차트를 독립적인 카드로 분리
+차트 컴포넌트 교체가 용이한 구조
+&lt;div className="min-h-screen bg-gray-50"&gt; &lt;div className="container mx-auto px-4 py-8"&gt; {/* 모든 콘텐츠 */} &lt;/div&gt;
+&lt;/div&gt;
+컨테이너 설정
+container mx-auto: 최대 너비 제한 + 중앙 정렬
+px-4 py-8: 좌우 패딩 16px, 상하 패딩 32px
+min-h-screen: 최소 높이를 화면 높이로 설정
+// 모바일 (default)
+grid-cols-1 // 태블릿 이상 (768px+)
+md:grid-cols-3
+// 카드 스타일
+bg-white rounded-lg shadow p-6 // 해석:
+bg-white // 배경색 흰색
+rounded-lg // 둥근 모서리 (8px)
+shadow // 그림자 효과
+p-6 // 패딩 24px (모든 방향)
+text-gray-900 // 제목 (가장 진한 회색)
+text-gray-500 // 부제목 (중간 회색)
+text-blue-600 // 강조 (파란색)
+text-green-600 // 긍정 (녹색)
+text-red-600 // 에러 (빨간색)
+┌─────────────────────────────────────────────────┐
+│ 📊 코인 트렌드 대시보드 │
+├─────────────────────────────────────────────────┤
+│ ┌─────────┐ ┌─────────┐ ┌─────────┐ │
+│ │총 마켓 │ │평균 │ │상승세 │ │
+│ │ 214 │ │트렌드 │ │마켓 │ │
+│ │ │ │ 0.156 │ │ 87 │ │
+│ └─────────┘ └─────────┘ └─────────┘ │
+├─────────────────────────────────────────────────┤
+│ 📈 트렌드 가중치 차트 │
+│ [차트 영역 준비됨] │
+├─────────────────────────────────────────────────┤
+│ 📊 트렌드-가격 상관관계 │
+│ [차트 영역 준비됨] │
+├─────────────────────────────────────────────────┤
+│ 📈 최고가 트렌드 │
+│ [차트 영역 준비됨] │
+└─────────────────────────────────────────────────┘
+// ✅ 좋은 예: Early Return
+if (isLoading) return &lt;LoadingUI /&gt;;
+if (error) return &lt;ErrorUI /&gt;;
+return &lt;MainUI /&gt;; // ❌ 나쁜 예: 중첩 조건문
+return ( &lt;div&gt; {isLoading ? &lt;LoadingUI /&gt; : ( error ? &lt;ErrorUI /&gt; : &lt;MainUI /&gt; )} &lt;/div&gt;
+);
+// 기본 = 모바일 스타일
+grid-cols-1 // md: (768px 이상) = 태블릿/데스크톱 스타일
+md:grid-cols-3
+&lt;header&gt; // 헤더 영역
+&lt;main&gt; // 메인 콘텐츠
+&lt;section&gt; // 각 차트 섹션 큰 컴포넌트 먼저 → 레이아웃 확정
+작은 컴포넌트 나중에 → 기능별 분리
+원인: tailwind.config.js의 content 경로 설정 오류해결:// tailwind.config.js
+content: [ "./index.html", "./src/**/*.{js,ts,jsx,tsx}", // 모든 React 파일 포함
+]
+원인: Viewport meta 태그 누락해결: index.html에 추가&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+원인: 데이터 로딩 전에 stats 계산 시도해결: 옵셔널 체이닝 사용{stats &amp;&amp; ( &lt;div&gt;{stats.totalMarkets}&lt;/div&gt;
+)}
+다음 글에서는 Issue #3: 마켓별 트렌드 가중치 Bar Chart + 추세선 구현을 진행합니다.
+Recharts 라이브러리 사용
+Bar Chart 생성
+선형 회귀 추세선 계산
+인터랙티브 기능 추가 <a data-tooltip-position="top" aria-label="https://github.com/pyhu26/coin-dashboard" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/pyhu26/coin-dashboard" target="_self">GitHub Repo</a>
+<br><a data-tooltip-position="top" aria-label="https://sparkly-pony-ae3435.netlify.app/" rel="noopener nofollow" class="external-link is-unresolved" href="https://sparkly-pony-ae3435.netlify.app/" target="_self">완성 웹사이트</a>
+관련 커밋: bbd83f0, e05ac58
+이 시리즈는 Claude Code와 함께하는 실제 개발 과정을 기록한 바이브 코딩기입니다.]]></description><link>01.project/coin-대시보드/02-기본-대시보드-레이아웃-구현.html</link><guid isPermaLink="false">01.project/Coin 대시보드/02-기본-대시보드-레이아웃-구현.md</guid><pubDate>Sun, 19 Oct 2025 02:34:50 GMT</pubDate></item><item><title><![CDATA[01-Supabase-연결-및-데이터-조회]]></title><description><![CDATA[
+"Supabase에 연결해서 마켓 데이터를 가져오고 싶어. React Query로 캐싱도 구현하고, 에러 처리도 잘 해줘." ✅ Supabase 클라이언트 설정
+✅ 환경 변수 구성
+✅ TypeScript 타입 정의
+✅ React Query를 사용한 데이터 페칭
+✅ 에러 핸들링 구현
+먼저 Supabase 클라이언트를 초기화하는 모듈을 작성했습니다.src/lib/supabase.tsimport { createClient } from '@supabase/supabase-js'; const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY; if (!supabaseUrl || !supabaseAnonKey) { throw new Error('Supabase URL과 Anon Key가 필요합니다.');
+} export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+환경 변수 체크
+Vite는 import.meta.env를 사용
+VITE_ 접두사가 필요 (보안상 명시적으로 노출할 변수만 사용)
+초기화 시점에 필수 값 검증
+데이터 구조를 명확히 하기 위해 타입을 정의했습니다.src/types/index.tsexport interface MarketData { market_name: string; trend_weight: number; last_high_price: number; high_prices: number[] | null; timestamp_array: number[] | null; analysis_time: string | null; created_at: string;
+} export interface MarketStats { totalMarkets: number; averageTrend: number; positiveTrendCount: number;
+}
+설계 포인트
+high_prices와 timestamp_array는 시계열 데이터용 (나중에 Line Chart에서 사용)
+null 허용으로 유연성 확보
+MarketStats는 통계 계산용 별도 타입
+src/lib/queryClient.tsimport { QueryClient } from '@tanstack/react-query'; export const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 1000 * 60 * 5, // 5분 gcTime: 1000 * 60 * 10, // 10분 (구 cacheTime) retry: 1, refetchOnWindowFocus: false, }, },
+});
+캐싱 전략
+staleTime: 5분 → 5분 동안은 캐시된 데이터 사용
+gcTime: 10분 → 10분 후 가비지 컬렉션
+retry: 1 → 실패 시 1번만 재시도 (빠른 실패)
+refetchOnWindowFocus: false → 탭 전환 시 재조회 방지
+src/hooks/useMarketData.tsimport { useQuery } from '@tanstack/react-query';
+import { supabase } from '../lib/supabase';
+import type { MarketData } from '../types'; export function useMarketData() { return useQuery({ queryKey: ['marketData'], queryFn: async () =&gt; { const { data, error } = await supabase .from('market_trends') .select('*') .order('created_at', { ascending: false }) .limit(1000); if (error) throw error; return data as MarketData[]; }, });
+} // 통계 계산 훅
+export function useMarketStats(data: MarketData[] | undefined) { if (!data || data.length === 0) return null; return { totalMarkets: data.length, averageTrend: data.reduce((sum, d) =&gt; sum + d.trend_weight, 0) / data.length, positiveTrendCount: data.filter(d =&gt; d.trend_weight &gt; 0.2).length, };
+}
+구현 특징
+queryKey로 캐시 식별
+Supabase의 .select('*') 문법 사용
+최신 데이터부터 정렬 (created_at desc)
+통계 계산은 별도 훅으로 분리 (재사용성)
+src/App.tsximport { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './lib/queryClient';
+import { Dashboard } from './components/Dashboard'; function App() { return ( &lt;QueryClientProvider client={queryClient}&gt; &lt;Dashboard /&gt; &lt;/QueryClientProvider&gt; );
+} export default App;
+{ "totalMarkets": 214, "averageTrend": 0.156, "positiveTrendCount": 87
+}
+214개의 마켓 데이터를 성공적으로 가져왔습니다!
+첫 로딩: Supabase에서 데이터 fetch (약 500ms)
+5분 이내 재방문: 캐시된 데이터 즉시 표시 (0ms)
+5분 경과 후: 백그라운드에서 자동 갱신 import.meta.env.VITE_* 형식으로만 접근 가능
+.env 파일에 민감한 정보 저장
+Git에 .env 파일은 커밋하지 않음 (.gitignore) 데이터 페칭, 캐싱, 에러 처리를 한 번에 해결
+isLoading, error, data 상태를 자동 관리
+수동으로 useState, useEffect 쓸 필요 없음
+// ❌ 컴파일 에러
+const price: number = data.market_name; // ✅ 타입 체크 통과
+const price: number = data.last_high_price;
+// SQL: SELECT * FROM market_trends ORDER BY created_at DESC LIMIT 1000
+const { data } = await supabase .from('market_trends') .select('*') .order('created_at', { ascending: false }) .limit(1000);
+원인: 패키지 설치 누락해결:npm install @supabase/supabase-js
+원인: VITE_ 접두사 누락해결:# ❌ 잘못된 형식
+SUPABASE_URL=... # ✅ 올바른 형식
+VITE_SUPABASE_URL=...
+원인: Supabase 프로젝트 설정에서 허용된 도메인 확인 필요해결: Supabase Dashboard → Settings → API → Site URL 추가다음 글에서는 Issue #2: 기본 대시보드 레이아웃 구현을 진행합니다.
+Dashboard 컴포넌트 작성
+통계 카드 UI
+로딩/에러 상태 처리 <a data-tooltip-position="top" aria-label="https://github.com/pyhu26/coin-dashboard" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/pyhu26/coin-dashboard" target="_self">GitHub Repo</a>
+<br><a data-tooltip-position="top" aria-label="https://sparkly-pony-ae3435.netlify.app/" rel="noopener nofollow" class="external-link is-unresolved" href="https://sparkly-pony-ae3435.netlify.app/" target="_self">완성 웹사이트</a>
+관련 커밋: 2fc7909
+이 시리즈는 Claude Code와 함께하는 실제 개발 과정을 기록한 바이브 코딩기입니다.]]></description><link>01.project/coin-대시보드/01-supabase-연결-및-데이터-조회.html</link><guid isPermaLink="false">01.project/Coin 대시보드/01-Supabase-연결-및-데이터-조회.md</guid><pubDate>Sun, 19 Oct 2025 02:31:50 GMT</pubDate></item><item><title><![CDATA[00-프로젝트-시작-PRD-작성]]></title><description><![CDATA[
+"Supabase에 저장된 암호화폐 시장 데이터를 시각화하는 대시보드를 만들고 싶어. 데이터는 ./markets.csv 파일을 참고해주고 트렌드 가중치와 가격 데이터를 차트로 보여주고, 추세선도 표시하고 싶어 기술 스택은 react, vite로 만들었으면 좋겠고 대략적인 ui 디자인을 ascii 코드로 포함이 되었으면 좋겠어"
+프로젝트를 시작하기 전, 먼저 요구사항을 명확히 정리하는 PRD 문서를 작성했습니다.
+목적: Supabase에 저장된 암호화폐 시장 데이터를 실시간으로 가져와 시각화
+형태: 1페이지 React 웹 대시보드
+핵심 가치: 트렌드 분석과 가격 추이를 직관적으로 파악
+interface MarketData { market_name: string; // 마켓명 (예: KRW-BTC) trend_weight: number; // 트렌드 가중치 (0~1) last_high_price: number; // 최근 최고가 analysis_time: string; // 분석 시간
+} 총 마켓 수
+평균 트렌드 가중치
+상승세 마켓 수 (trend_weight &gt; 0.2) Bar Chart: 트렌드 가중치 상위 마켓 + 추세선
+Scatter Plot: 트렌드 가중치 vs 가격 상관관계 + 추세선
+Line Chart: 시간별 가격 추이 + 추세선
+Frontend
+├── React (Vite)
+├── TypeScript
+├── Tailwind CSS
+├── Recharts (차트 라이브러리)
+└── React Query (데이터 캐싱) Backend
+└── Supabase (실시간 데이터베이스)
+왜 이 스택인가?
+Vite: 빠른 개발 서버와 빌드 속도
+Recharts: 추세선 구현이 용이하고 커스터마이징이 자유로움
+React Query: 자동 캐싱과 리페칭으로 실시간 업데이트 구현에 유리
+Supabase: PostgreSQL 기반으로 실시간 구독 기능 제공 Supabase 연결 및 데이터 조회
+기본 대시보드 레이아웃
+트렌드 가중치 Bar Chart + 추세선
+트렌드-가격 Scatter Plot + 추세선 실시간 데이터 업데이트
+시간별 가격 추이 Line Chart
+고급 필터링 기능
+반응형 디자인
+┌─────────────────────────────────────────────────────────────┐
+│ 📊 코인 트렌드 대시보드 │
+├─────────────────────────────────────────────────────────────┤
+│ [총 마켓: 77] [평균 트렌드: 0.15] [상승세: 45] │
+├─────────────────────────────────────────────────────────────┤
+│ │
+│ 📈 트렌드 가중치 상위 마켓 (Bar Chart) [표시 개수: 20 ▼] │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ 0.4 │████████████ MNT │ │
+│ │ 0.3 │█████████ GAS │ │
+│ │ │ 추세선 ---- │ │
+│ └─────────────────────────────────────────────────────────┘ │
+│ │
+│ 📊 트렌드 vs 가격 (Scatter Plot + 추세선) │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ Price │ ● MNT │ │
+│ │ │ ● ● GAS 추세선 ━━━ │ │
+│ │ │ ● ● │ │
+│ │ └──────────── Trend Weight │ │
+│ └─────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+PRD를 기반으로 Phase 1 작업을 GitHub Issues로 분리했습니다.# 로컬에서 PRD.md 작성 후 커밋
+git add PRD.md
+git commit -m "docs: PRD 문서 추가"
+git push # GitHub Issues 생성
+gh issue create --title "[Phase 1] Supabase 연결 및 데이터 조회 구현" \ --body "$(cat &lt;&lt;EOF
+## 목표
+Supabase 클라이언트를 설정하고 암호화폐 시장 데이터를 조회하는 기능 구현 ## 작업 내용
+- [ ] Supabase 프로젝트 설정 및 API 키 획득
+- [ ] Supabase 클라이언트 라이브러리 설치
+- [ ] 환경 변수 설정 (.env)
+- [ ] 데이터 조회 API 함수 작성
+- [ ] React Query를 사용한 데이터 캐싱 구현 ## 완료 조건
+- Supabase에서 데이터를 성공적으로 조회할 수 있음
+- 데이터가 적절히 캐싱됨
+- 에러 핸들링이 구현됨
+EOF
+)" gh issue create --title "[Phase 1] 기본 대시보드 레이아웃 구현"
+gh issue create --title "[Phase 1] 마켓별 트렌드 가중치 차트 + 추세선 구현"
+gh issue create --title "[Phase 1] 트렌드-가격 상관관계 Scatter Plot + 추세선 구현"
+npm create vite@latest coin-dashboard -- --template react-ts
+cd coin-dashboard
+npm install
+# UI &amp; 스타일링
+npm install tailwindcss postcss autoprefixer
+npx tailwindcss init -p # 차트 라이브러리
+npm install recharts # 상태 관리 &amp; 데이터 페칭
+npm install @tanstack/react-query # Supabase 클라이언트
+npm install @supabase/supabase-js
+.env 파일 생성:VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+tailwind.config.js:/** @type {import('tailwindcss').Config} */
+export default { content: [ "./index.html", "./src/**/*.{js,ts,jsx,tsx}", ], theme: { extend: {}, }, plugins: [],
+}
+coin-dashboard/
+├── src/
+│ ├── components/ # React 컴포넌트
+│ ├── hooks/ # 커스텀 훅
+│ ├── lib/ # 라이브러리 설정
+│ ├── types/ # TypeScript 타입 정의
+│ └── utils/ # 유틸리티 함수
+├── PRD.md # 프로젝트 요구사항 문서
+└── README.md
+git add .
+git commit -m "feat: 프로젝트 초기 설정 완료"
+git push 코딩을 시작하기 전에 요구사항을 명확히 하니 개발 방향이 뚜렷해짐
+우선순위를 미리 정해두니 MVP에 집중할 수 있었음 Phase 1 (MVP)과 Phase 2 (고도화)로 나누니 완성도 있는 단계별 개발 가능
+각 Phase별로 배포하여 빠른 피드백 수집 가능 각 작업을 이슈로 분리하니 진행 상황 추적이 명확
+커밋 메시지에 이슈 번호를 연결하면 자동으로 연관관계 생성
+다음 글에서는 Issue #1: Supabase 연결 및 데이터 조회 구현을 진행합니다.
+Supabase 클라이언트 설정
+React Query를 활용한 데이터 페칭
+에러 핸들링 구현
+<a data-tooltip-position="top" aria-label="https://github.com/pyhu26/coin-dashboard" rel="noopener nofollow" class="external-link is-unresolved" href="https://github.com/pyhu26/coin-dashboard" target="_self">github Repo</a><br>
+<a data-tooltip-position="top" aria-label="https://sparkly-pony-ae3435.netlify.app/" rel="noopener nofollow" class="external-link is-unresolved" href="https://sparkly-pony-ae3435.netlify.app/" target="_self">완성 웹 사이트</a>이 시리즈는 Claude Code와 함께하는 실제 개발 과정을 기록한 바이브 코딩기입니다.]]></description><link>01.project/coin-대시보드/00-프로젝트-시작-prd-작성.html</link><guid isPermaLink="false">01.project/Coin 대시보드/00-프로젝트-시작-PRD-작성.md</guid><pubDate>Sun, 19 Oct 2025 02:28:11 GMT</pubDate></item><item><title><![CDATA[코인 대시보드 웹 만들기]]></title><description><![CDATA[n8n으로 원화 코인 정보를 가져와서 추세선 기울기와 변동성을 계산한 정보를 Supabase에 저장하였다.
+손쉽게 해당 데이터를 확인해 보고 싶을때 사용하려고 웹사이트를 바이브 코딩으로 하나 개발하였다.
+바이브 코딩 개발기를 간략하게 작성해놓으려고 한다.
+]]></description><link>01.project/coin-대시보드/코인-대시보드-웹-만들기.html</link><guid isPermaLink="false">01.project/Coin 대시보드/코인 대시보드 웹 만들기.md</guid><pubDate>Sat, 18 Oct 2025 08:45:17 GMT</pubDate></item><item><title><![CDATA[무제]]></title><link>01.project/스레드-자동-업로드/무제.html</link><guid isPermaLink="false">01.project/스레드 자동 업로드/무제.md</guid><pubDate>Sat, 18 Oct 2025 08:21:28 GMT</pubDate></item><item><title><![CDATA[n8n JavaScript 노드에서 앞 노드의 결과값 가져오기]]></title><description><![CDATA[// 현재 아이템의 데이터
+const currentItem = $input.item.json;
+const value = currentItem.fieldName; // 또는 직접 접근
+const value = $input.item.json.fieldName;
+// Code 노드에서 items 배열 사용
+const allItems = items;
+const firstItem = items[0].json;
+const secondItem = items[1].json; // 모든 아이템 순회
+items.forEach((item, index) =&gt; { console.log(item.json);
+});
+// 특정 노드의 첫 번째 아이템
+const nodeData = $node["노드이름"].json; // 특정 노드의 특정 아이템
+const specificItem = $node["노드이름"].item.json; // 특정 노드의 파라미터
+const param = $node["노드이름"].parameter;
+// Expression에서 사용
+={{ $json.fieldName }} // 특정 노드 지정
+={{ $node["파라미터 설정"].json.unit }} // 첫 번째 아이템
+={{ $input.first().json.fieldName }} // 마지막 아이템
+={{ $input.last().json.fieldName }}
+// Code 노드
+const previousData = items[0].json;
+const marketName = previousData.market;
+const price = previousData.price; return items.map(item =&gt; ({ json: { market: item.json.market, processedPrice: item.json.price * 1.1 }
+}));
+// "전체 마켓 조회" 노드의 결과
+const markets = $node["전체 마켓 조회"].json; // "파라미터 설정" 노드의 값
+const unit = $node["파라미터 설정"].json.unit; // 현재 아이템
+const currentCandle = items[0].json; return [{ json: { marketInfo: markets, unit: unit, candleData: currentCandle }
+}];
+// HTTP Request 노드의 URL 필드 (Expression 모드)
+=https://api.upbit.com/v1/candles/minutes/{{ $node['파라미터 설정'].json.unit }}?market={{ $json.market }}&amp;count={{ $node['파라미터 설정'].json.count }}
+// 단일 아이템 반환
+return [{ json: { field1: value1, field2: value2 }
+}]; // 여러 아이템 반환
+return items.map(item =&gt; ({ json: { original: item.json, processed: processData(item.json) }
+})); // 조건부 필터링
+return items .filter(item =&gt; item.json.price &gt; 1000) .map(item =&gt; ({ json: item.json }));
+// 데이터 구조 확인
+console.log('Current item:', JSON.stringify($input.item.json, null, 2));
+console.log('All items count:', items.length);
+console.log('First item:', items[0].json);
+try { const data = $node["이전노드"].json; // 데이터 처리
+} catch (error) { console.error('Error accessing node data:', error.message); return [{ json: { error: error.message } }];
+} 노드 이름 정확성: $node["노드이름"]에서 노드 이름은 정확히 일치해야 합니다 (대소문자, 공백 포함)
+데이터 존재 여부: 노드가 실행되지 않았거나 데이터가 없으면 에러 발생
+배열 인덱스: items[0]는 첫 번째 아이템, 배열이 비어있으면 undefined
+Expression vs Code: Expression은 ={{ }}, Code 노드는 순수 JavaScript
+const params = $node["파라미터 설정"].json;
+const apiResponse = items[0].json; return [{ json: { queryParams: params, result: apiResponse, processedAt: new Date().toISOString() }
+}];
+const total = items.reduce((sum, item) =&gt; { return sum + item.json.price;
+}, 0); const average = total / items.length; return [{ json: { totalItems: items.length, totalPrice: total, averagePrice: average, items: items.map(i =&gt; i.json) }
+}];
+const threshold = $node["설정"].json.threshold; const filtered = items.filter(item =&gt; { return item.json.value &gt; threshold;
+}); return filtered.map(item =&gt; ({ json: { ...item.json, passedFilter: true }
+})); <a data-tooltip-position="top" aria-label="https://docs.n8n.io/code-examples/expressions/" rel="noopener nofollow" class="external-link is-unresolved" href="https://docs.n8n.io/code-examples/expressions/" target="_self">n8n 공식 문서 - Expressions</a>
+<br><a data-tooltip-position="top" aria-label="https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.code/" rel="noopener nofollow" class="external-link is-unresolved" href="https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.code/" target="_self">n8n 공식 문서 - Code Node</a>
+]]></description><link>02.area/n8n/n8n-javascript-노드에서-앞-노드의-결과값-가져오기.html</link><guid isPermaLink="false">02.area/n8n/n8n JavaScript 노드에서 앞 노드의 결과값 가져오기.md</guid><pubDate>Fri, 10 Oct 2025 02:35:23 GMT</pubDate></item><item><title><![CDATA[ChatGPT API 사용량 제한하기]]></title><description><![CDATA[OpenAI API를 사용하다 보면 예상치 못한 비용이 발생할 수 있습니다. 이를 방지하기 위해 OpenAI는 다양한 사용량 제한 및 예산 관리 기능을 제공합니다.
 예상치 못한 과금 방지
 프로젝트별 비용 관리
 개발/테스트 환경에서의 비용 통제
